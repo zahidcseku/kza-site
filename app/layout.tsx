@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Instrument_Serif, Archivo, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { SmoothScroll } from "./components/SmoothScroll";
 
 const instrumentSerif = Instrument_Serif({
   weight: "400",
@@ -41,7 +42,10 @@ export default function RootLayout({
       data-palette="terra"
       className={`${instrumentSerif.variable} ${archivo.variable} ${jetbrainsMono.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <SmoothScroll />
+        {children}
+      </body>
     </html>
   );
 }
