@@ -133,6 +133,14 @@ p { line-height: 1.5; }
 .nav-drawer-status .dot { width: 6px; height: 6px; border-radius: 50%; background: #3DCF8E; box-shadow: 0 0 0 3px color-mix(in oklab, #3DCF8E 30%, transparent); }
 
 /* ---------- HERO (sequential zoom, pure CSS) ---------- */
+/* hero-wrap gives the sticky pin room to play. Its bg matches the page bg
+   so the shrinking hero reveals terra around it and hands off cleanly to
+   the Ribbon. Height + sticky engage only where scroll-driven animations
+   are supported (see @supports below). */
+.hero-wrap {
+  position: relative;
+  background: var(--bg);
+}
 .hero {
   position: relative;
   height: 100vh; min-height: 640px;
@@ -173,6 +181,34 @@ p { line-height: 1.5; }
 @keyframes heroScrollParallax {
   from { transform: translateY(-4%); }
   to   { transform: translateY(5%); }
+}
+
+/* Pinned hero transition: hero sticks for one viewport of scroll, shrinking
+   into a rounded card with a shadow (revealing the page bg around it) while
+   the overlay text exits early. After the pin, the hero unsticks and slides
+   away as the Ribbon rises up to cover it. Wrap is 180vh = 100vh hero +
+   80vh pin. */
+@supports (animation-timeline: scroll()) {
+  .hero-wrap { height: 180vh; }
+  .hero {
+    position: sticky; top: 0;
+    animation: heroPinShrink linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0vh 80vh;
+  }
+  .hero-overlay {
+    animation: heroPinFade linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0vh 40vh;
+  }
+}
+@keyframes heroPinShrink {
+  from { transform: scale(1); border-radius: 0; box-shadow: 0 0 0 rgba(0,0,0,0); }
+  to   { transform: scale(0.85); border-radius: 28px; box-shadow: 0 30px 80px rgba(0,0,0,0.3); }
+}
+@keyframes heroPinFade {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-60px); }
 }
 
 /* One slot = 5.5s = 16.66% of 33s. Crossfade = 1.5s = 4.5%. The outgoing
@@ -547,14 +583,19 @@ p { line-height: 1.5; }
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
-  /* Force-disable the scroll-driven reveal + parallax (scroll timelines
-     ignore animation-duration), and ensure all content is visible. */
+  /* Force-disable the scroll-driven reveal + parallax + pin (scroll
+     timelines ignore animation-duration), and ensure all content is visible. */
+  .hero-wrap { height: auto !important; }
+  .hero { position: relative !important; }
   .ribbon-cell, .philosophy-eyebrow, .philosophy-body h2, .philosophy-signoff,
   .projects-head, .card, .feature-row, .projects-all,
   .footer-huge, .footer-cols, .footer-base,
-  .card-media .card-img, .hero-panel .hero-img {
+  .card-media .card-img, .hero-panel .hero-img,
+  .hero, .hero-overlay {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
   }
 }

@@ -8,40 +8,43 @@ import { HERO_IMAGES } from "@/lib/data";
 // sequence plays from CSS alone, so it works even if JS fails to hydrate.
 export function Hero() {
   return (
-    <section id="home" className="hero">
-      <div className="hero-stage">
-        {HERO_IMAGES.map((t, i) => (
-          <div key={i} className="hero-panel">
-            <Image
-              src={t.img}
-              alt=""
-              fill
-              sizes="100vw"
-              priority={i === 0}
-              className="hero-img"
-            />
-          </div>
-        ))}
-      </div>
+    <div className="hero-wrap">
+      <section id="home" className="hero">
+        <div className="hero-stage">
+          {HERO_IMAGES.map((t, i) => (
+            <div key={i} className="hero-panel">
+              <Image
+                src={t.img}
+                alt=""
+                fill
+                sizes="100vw"
+                priority={i === 0}
+                className="hero-img"
+              />
+            </div>
+          ))}
+        </div>
 
-      <div className="hero-vignette" aria-hidden />
+        <div className="hero-vignette" aria-hidden />
 
-      <div className="hero-overlay">
-        <span className="hero-eyebrow">
-          § Kazi Zahin Architects — Est. 2008, Khulna
-        </span>
-        <h1 className="hero-headline">
-          A studio of architects in Khulna — making places that <em>belong.</em>
-        </h1>
-        <p className="hero-sub">To their weather, and to their people.</p>
-        <a className="hero-cta" href="/about">
-          Find out more about the studio →
-        </a>
-      </div>
+        <div className="hero-overlay">
+          <span className="hero-eyebrow">
+            § Kazi Zahin Architects — Est. 2008, Khulna
+          </span>
+          <h1 className="hero-headline">
+            A studio of architects in Khulna — making places that{" "}
+            <em>belong.</em>
+          </h1>
+          <p className="hero-sub">To their weather, and to their people.</p>
+          <a className="hero-cta" href="/about">
+            Find out more about the studio →
+          </a>
+        </div>
 
-      <div className="hero-progress" aria-hidden>
-        <span className="hero-progress-fill" />
-      </div>
-    </section>
+        <div className="hero-progress" aria-hidden>
+          <span className="hero-progress-fill" />
+        </div>
+      </section>
+    </div>
   );
 }
