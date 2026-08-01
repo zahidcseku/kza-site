@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Clients — KZA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Archivo:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=5"/>
+</head>
+<body data-palette="sand">
+  <div id="app"></div>
+  <script>document.documentElement.setAttribute('data-palette','sand');</script>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script type="text/babel" src="src/data.jsx"></script>
+  <script type="text/babel" src="src/logo.jsx"></script>
+  <script type="text/babel" src="src/nav.jsx"></script>
+  <script type="text/babel" src="src/footer.jsx"></script>
+  <script type="text/babel" src="src/ribbon.jsx"></script>
+  <script type="text/babel" src="src/page-header.jsx"></script>
+  <script type="text/babel">
+    // Plausible clients, rendered as wordmark "logos"
+    const CLIENTS = [
+      {n:'BRAC',            mono:'sans',    sub:'NGO · since 2011'},
+      {n:'Grameenphone',    mono:'serif-i', sub:'Telecom · since 2014'},
+      {n:'Apex',            mono:'serif',   sub:'Industry · since 2013'},
+      {n:'Aarong',          mono:'serif-i', sub:'Retail · since 2015'},
+      {n:'Pan Pacific',     mono:'serif',   sub:'Hospitality · since 2018'},
+      {n:'BASF',            mono:'sans',    sub:'Chemicals · since 2019'},
+      {n:'ICDDR,B',         mono:'sans',    sub:'Health · since 2016'},
+      {n:'IFC',             mono:'serif',   sub:'Finance · since 2020'},
+      {n:'Square',          mono:'serif-i', sub:'Conglomerate · since 2012'},
+      {n:'Renata',          mono:'sans',    sub:'Pharma · since 2014'},
+      {n:'Beximco',         mono:'serif',   sub:'Textiles · since 2009'},
+      {n:'Rahimafrooz',     mono:'sans',    sub:'Energy · since 2015'},
+      {n:'UNESCO',          mono:'mono',    sub:'Cultural · since 2017'},
+      {n:'Friendship',      mono:'serif-i', sub:'Humanitarian · since 2013'},
+      {n:'Asian University',mono:'serif',   sub:'Education · since 2020'},
+      {n:'Sheraton BD',     mono:'serif',   sub:'Hospitality · since 2019'},
+    ];
+    const CARDS = [
+      {name:'Ayesha Rahman',  role:'Director of Estates, BRAC',       contact:'a.rahman@brac.net'},
+      {name:'Hasan Chowdhury', role:'Head of Facilities, Grameenphone', contact:'hasan.c@gp.com.bd'},
+      {name:'Dr. Mila Karim', role:'Principal Investigator, ICDDR,B',  contact:'mila.karim@icddrb.org'},
+    ];
+    function Wordmark({label, style}) {
+      const fam = style==='serif'||style==='serif-i' ? 'Instrument Serif, serif' : style==='mono' ? 'JetBrains Mono, monospace' : 'Archivo, sans-serif';
+      const it = style==='serif-i' ? 'italic' : 'normal';
+      const ls = style==='mono' ? '0.14em' : style==='sans' ? '-0.01em' : '-0.02em';
+      const weight = style==='sans' ? 600 : 400;
+      const tt = style==='sans' ? 'uppercase' : 'none';
+      return <div className='client-logo' style={{fontFamily: fam, fontStyle: it, letterSpacing: ls, fontWeight: weight, textTransform: tt}}>{label}</div>;
+    }
+    function Card({c, i}) {
+      return (
+        <div style={{background:'var(--paper)', border:'1px solid var(--rule)', padding: '28px', aspectRatio:'7/4', display:'flex', flexDirection:'column', justifyContent:'space-between', position:'relative'}}>
+          <div style={{display:'flex', justifyContent:'space-between'}}>
+            <div style={{width:18, height:18, border:'1px solid var(--ink)'}}></div>
+            <div style={{fontFamily:'var(--mono)', fontSize:10, letterSpacing:'0.16em', textTransform:'uppercase', color:'var(--muted)'}}>{String(i+1).padStart(2,'0')} / 03</div>
+          </div>
+          <div>
+            <div style={{fontFamily:'var(--serif)', fontSize: 30, lineHeight:1.1}}>{c.name}</div>
+            <div style={{fontFamily:'var(--mono)', fontSize: 11, letterSpacing:'0.12em', textTransform:'uppercase', color:'var(--muted)', marginTop:6}}>{c.role}</div>
+            <div style={{marginTop:14, fontSize:13, color:'var(--ink-2)'}}>{c.contact}</div>
+          </div>
+        </div>
+      );
+    }
+    function ClientsPage(){
+      return (<>
+        <Nav currentPage='clients' solid={true}/>
+        <PageHeader
+          eyebrow='§ Clients — Long Relationships'
+          kicker='Since 2008'
+          title='The list is short. Most of these names <em>keep coming back.</em>'
+          lede='We have worked with about sixty institutions and forty-two families over eighteen years. Seventy-one per cent of our commissions come from returning clients or a direct personal referral.'
+        />
+        <section className='section'>
+          <div className='section-head'>
+            <span className='eyebrow'>§ 01 — Institutions</span>
+            <h2>People who <em>trusted us twice.</em></h2>
+          </div>
+          <div className='clients-grid'>
+            {CLIENTS.map((c,i)=>(
+              <div className='client-cell' key={i}>
+                <Wordmark label={c.n} style={c.mono}/>
+                <div className='client-mono'>{c.sub}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+        <section className='section alt'>
+          <div className='section-head'>
+            <span className='eyebrow'>§ 02 — On the Desk</span>
+            <h2>Three recent <em>business cards.</em></h2>
+          </div>
+          <div style={{display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:24, maxWidth:'var(--container)', margin:'0 auto'}}>
+            {CARDS.map((c,i)=><Card key={i} c={c} i={i}/>)}
+          </div>
+        </section>
+        <Footer/>
+      </>);
+    }
+    ReactDOM.createRoot(document.getElementById('app')).render(<ClientsPage/>);
+  </script>
+</body>
+</html>

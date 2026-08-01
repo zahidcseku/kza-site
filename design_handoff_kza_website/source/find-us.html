@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Find Us — KZA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Archivo:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=5"/>
+</head>
+<body data-palette="sand">
+  <div id="app"></div>
+  <script>document.documentElement.setAttribute('data-palette','sand');</script>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script type="text/babel" src="src/data.jsx"></script>
+  <script type="text/babel" src="src/logo.jsx"></script>
+  <script type="text/babel" src="src/nav.jsx"></script>
+  <script type="text/babel" src="src/footer.jsx"></script>
+  <script type="text/babel" src="src/ribbon.jsx"></script>
+  <script type="text/babel" src="src/page-header.jsx"></script>
+  <script type="text/babel">
+    function FindUsPage(){
+      const [sent, setSent] = React.useState(false);
+      const submit = (e)=>{ e.preventDefault(); setSent(true); };
+      // coord 22.8203 N, 89.5495 E — we draw a stylised map of Khulna city with Rupsha & Bhairab rivers
+      return (<>
+        <Nav currentPage='find' solid={true}/>
+        <PageHeader
+          eyebrow='§ Find Us — Contact'
+          kicker='Sonadanga, Khulna · Bangladesh'
+          title='Come by <em>the studio.</em> Or write us a letter &mdash; we still read those.'
+          lede='We are in Sonadanga, Khulna — a short walk from the Rupsha and a fifteen-minute drive from the train station. Visitors are welcome any weekday morning if you write ahead. Tea is always on.'
+        />
+        <section className='section'>
+          <div className='findus'>
+            <div className='findus-side'>
+              <div className='eyebrow' style={{marginBottom:18}}>§ 01 — The Studio</div>
+              <h3>Sonadanga House</h3>
+              <p>Kazi Zahin Architects<br/>Sonadanga, Khulna<br/>Bangladesh</p>
+              <ul>
+                <li><span>Telephone</span><span>+880 1712 753 160</span></li>
+                <li><span>Email</span><span>kzarchi@gmail.com</span></li>
+                <li><span>Studio hours</span><span>Sun–Thu, 10–6</span></li>
+                <li><span>Coordinates</span><span>22.8203° N · 89.5495° E</span></li>
+              </ul>
+              <p style={{marginTop:30, fontFamily:'var(--mono)', fontSize:11, letterSpacing:'0.12em', textTransform:'uppercase', color:'var(--muted)'}}>Nearest landmark — Sonadanga Bus Terminal</p>
+            </div>
+            <div className='findus-map'>
+              <svg viewBox='0 0 500 500' preserveAspectRatio='xMidYMid slice'>
+                <defs>
+                  <pattern id='g' width='40' height='40' patternUnits='userSpaceOnUse'>
+                    <path d='M 40 0 L 0 0 0 40' fill='none' stroke='var(--rule)' strokeWidth='0.5'/>
+                  </pattern>
+                </defs>
+                <rect width='500' height='500' fill='url(#g)'/>
+                {/* Rupsha river — curving from NE to SW */}
+                <path d='M 520 120 C 400 180, 320 220, 300 300 S 240 420, 120 520' fill='none' stroke='#B6C7C4' strokeWidth='34' strokeLinecap='round'/>
+                {/* Bhairab — smaller canal on west */}
+                <path d='M 20 60 C 60 140, 70 220, 50 340 S 60 480, 110 520' fill='none' stroke='#B6C7C4' strokeWidth='18' strokeLinecap='round'/>
+                {/* roads */}
+                <path d='M 60 250 L 480 260' stroke='#A9A294' strokeWidth='2.5'/>
+                <path d='M 250 50 L 260 460' stroke='#A9A294' strokeWidth='2.5'/>
+                <path d='M 80 80 L 440 420' stroke='#A9A294' strokeWidth='1.5' strokeDasharray='2 4'/>
+                <path d='M 150 400 L 420 120' stroke='#A9A294' strokeWidth='1.5' strokeDasharray='2 4'/>
+                {/* district blocks */}
+                {Array.from({length: 20}).map((_,i)=>{
+                  const x = 70 + (i%5)*80; const y = 70 + Math.floor(i/5)*90;
+                  return <rect key={i} x={x} y={y} width='60' height='66' fill='#ECE4D3' stroke='var(--rule)' strokeOpacity='0.5' strokeWidth='0.6'/>;
+                })}
+                {/* railway */}
+                <path d='M 0 350 L 500 330' stroke='#8A6B47' strokeWidth='1' strokeDasharray='6 3'/>
+                <text x='20' y='345' fontFamily='JetBrains Mono, monospace' fontSize='9' fill='#8A6B47' letterSpacing='1'>RAILWAY →</text>
+                <text x='420' y='115' fontFamily='Instrument Serif, serif' fontSize='14' fontStyle='italic' fill='#7FA09C'>Rupsha</text>
+                <text x='30' y='460' fontFamily='Instrument Serif, serif' fontSize='12' fontStyle='italic' fill='#7FA09C'>Bhairab</text>
+                <text x='260' y='240' fontFamily='JetBrains Mono, monospace' fontSize='9' fill='#7A7468' letterSpacing='1'>KHULNA</text>
+              </svg>
+              <div className='findus-pin' style={{left:'40%', top:'54%'}}/>
+              <div className='findus-label' style={{left:'44%', top:'52%'}}>KZA Studio</div>
+              <div style={{position:'absolute', bottom:18, left:18, fontFamily:'var(--mono)', fontSize:10, letterSpacing:'0.12em', textTransform:'uppercase', color:'var(--muted)', background:'var(--paper)', padding:'4px 8px', border:'1px solid var(--rule)'}}>22.8203° N · 89.5495° E</div>
+              <div style={{position:'absolute', bottom:18, right:18, fontFamily:'var(--mono)', fontSize:10, letterSpacing:'0.12em', textTransform:'uppercase', color:'var(--muted)', background:'var(--paper)', padding:'4px 8px', border:'1px solid var(--rule)'}}>N ↑ · 1 : 20 000</div>
+            </div>
+          </div>
+        </section>
+
+        <section className='section alt'>
+          <div className='findus'>
+            <div className='findus-side'>
+              <div className='eyebrow' style={{marginBottom:18}}>§ 02 — Enquiry</div>
+              <h3>Write to us.</h3>
+              <p>We read every enquiry ourselves &mdash; usually within a working week. If your site is in Bangladesh and you would like a visit, mention the nearest town.</p>
+              <ul>
+                <li><span>Response time</span><span>~ 4 working days</span></li>
+                <li><span>Visits</span><span>Weekday mornings</span></li>
+                <li><span>Language</span><span>Bangla · English</span></li>
+              </ul>
+            </div>
+            <form className='findus-form' onSubmit={submit}>
+              {sent ? (
+                <div style={{padding:'80px 20px', textAlign:'center'}}>
+                  <div style={{fontFamily:'var(--serif)', fontSize:48, lineHeight:1.05, marginBottom:16}}>Thank you.</div>
+                  <p style={{color:'var(--ink-2)', maxWidth:380, margin:'0 auto'}}>We have your note. Someone at the studio will write back within four working days &mdash; usually by the person who will end up doing the first sketch.</p>
+                </div>
+              ) : (<>
+                <div className='row'>
+                  <div><label>First name</label><input required placeholder='Ayesha'/></div>
+                  <div><label>Last name</label><input required placeholder='Karim'/></div>
+                </div>
+                <div className='row'>
+                  <div><label>Email</label><input type='email' required placeholder='a.karim@example.com'/></div>
+                  <div><label>Phone</label><input placeholder='+880 …'/></div>
+                </div>
+                <div className='row'>
+                  <div><label>Nature of enquiry</label>
+                    <select defaultValue=''>
+                      <option value='' disabled>Select one…</option>
+                      <option>New commission</option>
+                      <option>Press</option>
+                      <option>Collaboration</option>
+                      <option>Careers</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+                  <div><label>Site town</label><input placeholder='e.g. Khulna, Bagerhat'/></div>
+                </div>
+                <div><label>Brief</label><textarea required placeholder='A paragraph about the site, the programme, and a timeline.'/></div>
+                <button type='submit'>Send enquiry →</button>
+              </>)}
+            </form>
+          </div>
+        </section>
+        <Footer/>
+      </>);
+    }
+    ReactDOM.createRoot(document.getElementById('app')).render(<FindUsPage/>);
+  </script>
+</body>
+</html>

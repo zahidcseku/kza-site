@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>About — KZA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Archivo:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=5"/>
+</head>
+<body data-palette="sand">
+  <div id="app"></div>
+  <script>document.documentElement.setAttribute('data-palette','sand');</script>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script type="text/babel" src="src/data.jsx"></script>
+  <script type="text/babel" src="src/logo.jsx"></script>
+  <script type="text/babel" src="src/nav.jsx"></script>
+  <script type="text/babel" src="src/footer.jsx"></script>
+  <script type="text/babel" src="src/ribbon.jsx"></script>
+  <script type="text/babel" src="src/page-header.jsx"></script>
+  <script type="text/babel">
+    const TEAM = [
+      {name:'Kazi Zahin', role:'Founding Principal', seed:1},
+      {name:'Shahnaz Karim', role:'Design Partner', seed:2},
+      {name:'Iftekhar Rahman', role:'Technical Director', seed:3},
+      {name:'Nusrat Jahan', role:'Associate, Interiors', seed:4},
+      {name:'Mahmud Hasan', role:'Associate, Heritage', seed:5},
+      {name:'Tasnim Akter', role:'Lead, Sustainability', seed:6},
+      {name:'Rahim Ullah', role:'Head of Workshop', seed:7},
+      {name:'Priya Das', role:'Urban Research', seed:8},
+    ];
+    const TIMELINE = [
+      ['2008', 'Studio founded', 'Kazi Zahin opens a one-room practice in Sonadanga, Khulna.'],
+      ['2011', 'First built work', 'A small riverfront residence completes on the Rupsha.'],
+      ['2014', 'Berger Award', 'Early Berger Award for Emerging Practice (Bangladesh).'],
+      ['2017', 'Twelve built', 'The studio crosses a dozen completed works across three divisions.'],
+      ['2021', 'Berger Award, again', 'A second Berger Award — this time for built residential work.'],
+      ['2022', 'Aga Khan nomination', 'A network of rural reading rooms is nominated for the Aga Khan Award for Architecture.'],
+      ['2024', 'Twenty-two people', 'The studio reaches 22 hands — the size we never want to exceed.'],
+      ['2026', 'Today', 'Twelve active commissions across four countries, and a long queue of site visits.'],
+    ];
+    function Portrait({ seed }){
+      const hue = (seed*47)%360;
+      return (<svg viewBox='0 0 120 160' preserveAspectRatio='xMidYMid slice'>
+        <rect width='120' height='160' fill={'hsl('+hue+' 12% 22%)'}/>
+        <g fill='none' stroke={'hsl('+hue+' 20% 70%)'} strokeOpacity='0.35'>
+          {[...Array(24)].map((_,i)=>(<line key={i} x1='0' y1={i*7} x2='120' y2={i*7} strokeWidth='0.4'/>))}
+        </g>
+        <ellipse cx='60' cy='70' rx='26' ry='32' fill={'hsl('+hue+' 18% 62%)'} opacity='0.85'/>
+        <rect x='28' y='110' width='64' height='70' fill={'hsl('+hue+' 22% 30%)'}/>
+      </svg>);
+    }
+    function AboutPage(){
+      return (<>
+        <Nav currentPage='about' solid={true}/>
+        <PageHeader
+          eyebrow='§ About — Studio Note'
+          kicker='Sonadanga, Khulna · Est. 2008'
+          title='A small practice that <em>draws slowly</em>, builds carefully, and visits often.'
+          lede='Kazi Zahin Architects is an independent studio of 22 people working from a three-storey house in Sonadanga, Khulna. We take on about eight commissions a year, because that is what we can do well.'
+        />
+        <section className='section'>
+          <div className='section-head'>
+            <span className='eyebrow'>§ 01 — How we work</span>
+            <h2>The drawings begin at the brickyard, <em>not the screen.</em></h2>
+          </div>
+          <div className='two-col'>
+            <p>Every commission starts with two weeks of living near the site — in a tea-shop, a rest-house, a guest room. We walk at dawn and at dusk. We watch where the shade falls in April and where the water stands in July. By the time the first line is drawn, the shape of the building is usually already present in the place itself.</p>
+            <p>We work with the trades we trust — four brick kilns along the Rupsha, two carpenters in Khulna town, one steel shop in Daulatpur — and we visit every site at least once a fortnight until it opens. It is a small way to work, and a slow one, and we do not believe in any other way.</p>
+          </div>
+        </section>
+
+        <Ribbon/>
+
+        <section className='section alt'>
+          <div className='section-head'>
+            <span className='eyebrow'>§ 02 — Principals &amp; Team</span>
+            <h2>Twenty-two hands, <em>four partners,</em> one workshop.</h2>
+          </div>
+          <div className='team-grid'>
+            {TEAM.map(t => (
+              <div className='team-card' key={t.name}>
+                <div className='team-portrait'><Portrait seed={t.seed}/></div>
+                <div className='who'>{t.name}</div>
+                <div className='role'>{t.role}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className='section'>
+          <div className='section-head'>
+            <span className='eyebrow'>§ 03 — Timeline</span>
+            <h2>An <em>eighteen-year</em> line, with a few bends.</h2>
+          </div>
+          <div className='timeline'>
+            {TIMELINE.map(([y,e,n]) => (
+              <div className='timeline-row' key={y}>
+                <div className='year'>{y}</div>
+                <div className='event'>{e}</div>
+                <div className='note'>{n}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <Footer/>
+      </>);
+    }
+    ReactDOM.createRoot(document.getElementById('app')).render(<AboutPage/>);
+  </script>
+</body>
+</html>

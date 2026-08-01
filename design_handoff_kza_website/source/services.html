@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Services — KZA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Archivo:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=6"/>
+<style>
+  /* Page-scoped: covers the full viewport with bg grid + foreground panels */
+  .svc-page {
+    position: relative;
+    min-height: 100vh;
+    background: #E8E5DD;
+    overflow: hidden;
+  }
+  .svc-bg {
+    position: absolute; inset: 0;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-auto-rows: 1fr;
+    gap: 8px;
+    padding: 8px;
+  }
+  .svc-bg-cell {
+    background: #C9C5BC;
+    overflow: hidden;
+    position: relative;
+    aspect-ratio: 1 / 1.1;
+    transition: opacity 1.2s ease;
+  }
+  .svc-bg-cell img {
+    width: 100%; height: 100%; object-fit: cover;
+    filter: grayscale(1) contrast(0.95) brightness(1.05);
+    opacity: 0.85;
+    transition: opacity 1.6s ease, transform 8s ease;
+  }
+  .svc-bg-cell.fading img { opacity: 0; }
+
+  .svc-fg {
+    position: relative;
+    z-index: 5;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr minmax(720px, 56vw) 1fr;
+    align-items: stretch;
+  }
+  .svc-fg::before, .svc-fg::after { content: ''; }
+
+  .svc-panels {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: stretch;
+    margin: clamp(80px, 10vh, 140px) 0 clamp(80px, 10vh, 140px);
+    gap: 0;
+    min-height: clamp(420px, 60vh, 640px);
+  }
+  .svc-panel {
+    position: relative;
+    background: #BFBCB3;
+    color: #FFF;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+    overflow: hidden;
+    transition: background .5s ease;
+  }
+  .svc-panel + .svc-panel { border-left: 1px solid rgba(255,255,255,0.18); }
+  .svc-panel-label {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(-90deg);
+    transform-origin: center;
+    white-space: nowrap;
+    font-family: var(--mono);
+    font-size: clamp(18px, 2vw, 30px);
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: #FFF;
+    font-weight: 500;
+    transition: color .35s, letter-spacing .5s, font-size .35s;
+  }
+  .svc-panel-bar {
+    position: absolute;
+    bottom: 16%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 28px;
+    height: 3px;
+    background: var(--accent);
+    transition: width .4s, background .4s;
+  }
+  /* Per-category accent (matches dcon palette: orange/white/grey/green) */
+  .svc-panel[data-id="arch"] .svc-panel-bar { background: #E36B1E; }
+  .svc-panel[data-id="int"]  .svc-panel-bar { background: #FFFFFF; }
+  .svc-panel[data-id="con"]  .svc-panel-bar { background: #6B665B; opacity: 0.8; }
+  .svc-panel[data-id="life"] .svc-panel-bar { background: #9DB94D; }
+
+  .svc-panel.on { background: #1B7FD6; }
+  .svc-panel.on .svc-panel-label { color: #FFF; letter-spacing: 0.34em; }
+  .svc-panel.on .svc-panel-bar { width: 44px; height: 4px; }
+
+  .svc-panel:hover:not(.on) { background: #A8A59B; }
+
+  /* Top-left brand mark (over bg) */
+  .svc-mark {
+    position: absolute;
+    top: 28px; left: 28px;
+    z-index: 6;
+    display: flex; align-items: center; gap: 12px;
+    font-family: var(--serif);
+    color: #2B241A;
+  }
+  .svc-mark .mk { width: 44px; height: 44px; }
+  .svc-mark .name { font-size: 22px; letter-spacing: -0.01em; }
+  .svc-mark .name small { display: block; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #6B665B; margin-top: 2px; }
+
+  /* Top-right meta */
+  .svc-meta {
+    position: absolute;
+    top: 32px; right: 32px;
+    z-index: 6;
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: #2B241A;
+    text-align: right;
+  }
+  .svc-meta div + div { margin-top: 6px; opacity: 0.65; }
+
+  /* Bottom strip — small thumbnails, decorative */
+  .svc-strip {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    z-index: 4;
+    height: 64px;
+    display: grid;
+    grid-template-columns: repeat(20, 1fr);
+    gap: 4px;
+    padding: 4px 8px;
+  }
+  .svc-strip-cell {
+    background: #C9C5BC;
+    overflow: hidden;
+    position: relative;
+  }
+  .svc-strip-cell img {
+    width: 100%; height: 100%; object-fit: cover;
+    filter: grayscale(1) brightness(1.05) contrast(0.95);
+    opacity: 0.75;
+  }
+
+  /* Hint nav at top */
+  .svc-hint {
+    position: absolute;
+    bottom: 90px;
+    left: 50%; transform: translateX(-50%);
+    z-index: 6;
+    font-family: var(--mono);
+    font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: #2B241A;
+    background: rgba(255,255,255,0.55);
+    padding: 6px 14px;
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+
+  /* Active panel detail — small fly-in caption above strip */
+  .svc-active-cap {
+    position: absolute;
+    bottom: 92px;
+    right: 32px;
+    z-index: 6;
+    text-align: right;
+    font-family: var(--serif);
+    color: #1B7FD6;
+    transition: color .4s ease;
+  }
+  .svc-active-cap .num { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #6B665B; }
+  .svc-active-cap .name { font-size: 38px; line-height: 1; letter-spacing: -0.01em; margin-top: 4px; }
+  .svc-active-cap .desc { font-family: var(--sans); font-size: 12.5px; color: #2B241A; max-width: 320px; margin-top: 8px; line-height: 1.45; margin-left: auto; }
+
+  @media (max-width: 900px) {
+    .svc-fg { grid-template-columns: 1fr; padding: 0 16px; }
+    .svc-panels { grid-template-columns: 1fr; }
+    .svc-panel { aspect-ratio: 6/1; min-height: 64px; }
+    .svc-panel-label { transform: translate(-50%, -50%) rotate(0deg); letter-spacing: 0.24em; }
+    .svc-panel.on .svc-panel-label { letter-spacing: 0.3em; }
+    .svc-bg { grid-template-columns: repeat(4, 1fr); }
+    .svc-active-cap { left: 16px; right: 16px; text-align: left; }
+    .svc-active-cap .desc { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+  <div id="app"></div>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel">
+    // ---- placeholder builder (XML-safe) -----------------------------------------------
+    function bldg(seed, palette) {
+      const e = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      const P = palette || { bg:'#D7D3CA', fg:'#1A1814' };
+      const S = seed || 1;
+      // pseudo-random tower silhouette so each cell is different
+      const rand = (n, mod) => ((S * 9301 + n * 49297 + 233280) % (mod || 100));
+      const th = 80 + rand(1, 220);     // tower height
+      const tw = 50 + rand(2, 80);      // tower width
+      const tx = 60 + rand(3, 380);     // x offset
+      const lo = 360 - rand(4, 40);
+      const win = (x, y, w, h, op=0.35) => `<rect x='${x}' y='${y}' width='${w}' height='${h}' fill='${e(P.fg)}' fill-opacity='${op}'/>`;
+      let windows = '';
+      const cols = Math.max(2, Math.floor(tw/14));
+      const rows = Math.max(3, Math.floor(th/16));
+      for (let r=0;r<rows;r++) {
+        for (let c=0;c<cols;c++) {
+          const op = ((S + r*3 + c) % 4 === 0) ? 0.55 : 0.18;
+          windows += win(tx + 8 + c*(tw/cols), lo - th + 14 + r*(th/rows), Math.max(4, tw/cols-4), Math.max(4, th/rows-6), op);
+        }
+      }
+      const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 400' preserveAspectRatio='xMidYMid slice'>
+<rect width='600' height='400' fill='${e(P.bg)}'/>
+<g fill='${e(P.fg)}' fill-opacity='0.18'>
+<rect x='${tx}' y='${lo - th}' width='${tw}' height='${th}'/>
+<rect x='${tx + tw + 24}' y='${lo - (th*0.7)}' width='${tw*0.6}' height='${th*0.7}'/>
+<rect x='${tx - 36}' y='${lo - (th*0.55)}' width='${tw*0.45}' height='${th*0.55}'/>
+</g>
+<g>${windows}</g>
+<rect x='0' y='${lo}' width='600' height='${400-lo}' fill='${e(P.fg)}' fill-opacity='0.06'/>
+</svg>`;
+      return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)));
+    }
+
+    // ---- data ------------------------------------------------------------------------
+    const CATS = [
+      { id:'arch', n:'01', name:'Architecture', accent:'#E36B1E', target:'projects.html?cat=arch',
+        desc:'New-build, adaptive reuse, lead-architect commissions across the delta.' },
+      { id:'int',  n:'02', name:'Interior',     accent:'#FFFFFF', target:'projects.html?cat=int',
+        desc:'Millwork, lighting and furniture. Drawn and fabricated in the Khulna workshop.' },
+      { id:'con',  n:'03', name:'Construction', accent:'#6B665B', target:'projects.html?cat=con',
+        desc:'Site supervision, contractor liaison, mock-ups and material trials.' },
+      { id:'life', n:'04', name:'Life Style',   accent:'#9DB94D', target:'projects.html?cat=life',
+        desc:'Workshops, residencies and field guides — the studio\u2019s outward-facing work.' },
+    ];
+
+    const palettes = [
+      {bg:'#E2DFD7', fg:'#2B241A'}, {bg:'#D5D2C9', fg:'#1A1814'},
+      {bg:'#CFCBC1', fg:'#3A352D'}, {bg:'#DAD6CD', fg:'#2B241A'},
+      {bg:'#C9C5BC', fg:'#14130F'}, {bg:'#E0DCD3', fg:'#2B241A'},
+    ];
+    const N_BG = 8 * 5; // 8 cols x 5 rows
+    const POOL = Array.from({length: 80}, (_, i) => bldg(i+3, palettes[i % palettes.length]));
+
+    // ---- component -------------------------------------------------------------------
+    function ServicesPage() {
+      const [active, setActive] = React.useState('int');
+      const [bgImgs, setBgImgs] = React.useState(() => Array.from({length: N_BG}, (_, i) => POOL[i]));
+      const [fading, setFading] = React.useState(-1);
+
+      // Slowly rotate background tiles — pick a random cell, fade it, swap, fade in.
+      React.useEffect(() => {
+        const interval = setInterval(() => {
+          const idx = Math.floor(Math.random() * N_BG);
+          setFading(idx);
+          setTimeout(() => {
+            setBgImgs(arr => {
+              const next = arr.slice();
+              next[idx] = POOL[Math.floor(Math.random() * POOL.length)];
+              return next;
+            });
+            setFading(-1);
+          }, 900);
+        }, 1400);
+        return () => clearInterval(interval);
+      }, []);
+
+      const cur = CATS.find(c => c.id === active);
+
+      return (
+        <div className="svc-page" data-screen-label="Services">
+          {/* Background grid of gently desaturated project thumbs */}
+          <div className="svc-bg" aria-hidden="true">
+            {bgImgs.map((src, i) => (
+              <div key={i} className={'svc-bg-cell' + (fading === i ? ' fading' : '')}>
+                <img src={src} alt=""/>
+              </div>
+            ))}
+          </div>
+
+          {/* Brand mark top-left */}
+          <a href="index.html" className="svc-mark">
+            <svg className="mk" viewBox="0 0 100 100">
+              <rect x="6" y="6" width="88" height="88" fill="none" stroke="#2B241A" strokeWidth="2"/>
+              <text x="50" y="62" textAnchor="middle" fontFamily="Instrument Serif, serif" fontSize="44" fill="#2B241A">K</text>
+            </svg>
+            <span className="name">KZ Architects<small>Practice / 2008</small></span>
+          </a>
+
+          {/* Top-right meta */}
+          <div className="svc-meta">
+            <div>Services / 04 categories</div>
+            <div>Studio · Dhanmondi, Dhaka</div>
+            <div><a href="index.html" style={{color:'inherit', borderBottom:'1px solid currentColor', paddingBottom:1}}>← Home</a></div>
+          </div>
+
+          {/* Foreground panels (centered band) */}
+          <div className="svc-fg">
+            <div></div>
+            <div className="svc-panels">
+              {CATS.map(c => (
+                <button
+                  key={c.id}
+                  data-id={c.id}
+                  className={'svc-panel' + (active === c.id ? ' on' : '')}
+                  onMouseEnter={() => setActive(c.id)}
+                  onClick={() => { window.location.href = c.target; }}
+                  aria-label={c.name}
+                >
+                  <span className="svc-panel-label">{c.name}</span>
+                  <span className="svc-panel-bar"></span>
+                </button>
+              ))}
+            </div>
+            <div></div>
+          </div>
+
+          {/* Caption for the active category */}
+          <div className="svc-active-cap" key={cur.id}>
+            <div className="num">— {cur.n} / 04 —</div>
+            <div className="name" style={{color: active === 'int' ? '#1B7FD6' : '#1A1814'}}>{cur.name}.</div>
+            <div className="desc">{cur.desc}</div>
+          </div>
+
+          <div className="svc-hint">Hover &rarr; preview · Click &rarr; open category</div>
+
+          {/* Bottom thumbnail strip */}
+          <div className="svc-strip" aria-hidden="true">
+            {Array.from({length: 20}).map((_, i) => (
+              <div key={i} className="svc-strip-cell">
+                <img src={POOL[(i * 7 + 3) % POOL.length]} alt=""/>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById('app')).render(<ServicesPage/>);
+  </script>
+</body>
+</html>

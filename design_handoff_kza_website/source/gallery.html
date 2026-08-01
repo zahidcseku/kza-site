@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Gallery — KZA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Archivo:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=5"/>
+</head>
+<body data-palette="sand">
+  <div id="app"></div>
+  <script>document.documentElement.setAttribute('data-palette','sand');</script>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script type="text/babel" src="src/data.jsx"></script>
+  <script type="text/babel" src="src/logo.jsx"></script>
+  <script type="text/babel" src="src/nav.jsx"></script>
+  <script type="text/babel" src="src/footer.jsx"></script>
+  <script type="text/babel" src="src/ribbon.jsx"></script>
+  <script type="text/babel" src="src/page-header.jsx"></script>
+  <script type="text/babel">
+    // Generate 24 varied process/detail tiles (models, sketches, site, textures)
+    const TILES = [
+      ['Sketch', 'sketch', '4/5'],
+      ['Model', 'model', '1/1'],
+      ['Site', 'site', '3/4'],
+      ['Texture', 'texture', '4/3'],
+      ['Brickwork', 'brick', '3/4'],
+      ['Plan', 'plan', '1/1'],
+      ['Roof framing', 'roof', '4/5'],
+      ['Section', 'section', '3/2'],
+      ['Courtyard', 'court', '4/5'],
+      ['Shutter', 'shutter', '3/4'],
+      ['Timber joint', 'joint', '1/1'],
+      ['Monsoon', 'rain', '4/3'],
+      ['Study', 'sketch', '3/4'],
+      ['Tile', 'texture', '1/1'],
+      ['Kiln', 'brick', '4/5'],
+      ['Walkway', 'site', '3/4'],
+      ['Model, 1:50', 'model', '3/2'],
+      ['Elevation', 'plan', '4/5'],
+    ];
+    function Tile({ label, kind }) {
+      const palette = {
+        sketch:['#EDE6D9','#2B241A','#8A6B47'],
+        model:['#2B241A','#EDE6D9','#C9A961'],
+        site:['#3A352D','#F2EEE7','#8A6B47'],
+        texture:['#8A6B47','#FBF8F1','#141311'],
+        brick:['#5C4628','#EDE6D9','#C44828'],
+        plan:['#FBF8F1','#141311','#8A6B47'],
+        roof:['#141311','#EDE6D9','#C9A961'],
+        section:['#746A57','#FBF8F1','#14130F'],
+        court:['#3A352D','#EDE6D9','#EDE6D9'],
+        shutter:['#2B241A','#F2EEE7','#C9A961'],
+        joint:['#EDE6D9','#2B241A','#8A6B47'],
+        rain:['#1A1814','#F2EEE7','#8A6B47'],
+      }[kind] || ['#3A352D','#F2EEE7','#8A6B47'];
+      const [bg, fg, ac] = palette;
+      const draw = () => {
+        switch(kind){
+          case 'sketch': return (<>
+            <g stroke={fg} strokeOpacity='0.7' fill='none' strokeWidth='1'>
+              <path d='M20 180 L120 60 L220 120 L280 180'/>
+              <path d='M20 180 L280 180'/>
+              <path d='M70 180 L70 130 L120 130 L120 180'/>
+              <path d='M160 180 L160 150 L200 150 L200 180'/>
+              <path d='M120 60 L120 130'/>
+            </g>
+          </>);
+          case 'plan': return (<>
+            <g stroke={fg} strokeOpacity='0.8' fill='none' strokeWidth='0.8'>
+              <rect x='40' y='40' width='220' height='160'/>
+              <rect x='60' y='60' width='80' height='60'/>
+              <rect x='160' y='60' width='80' height='60'/>
+              <rect x='60' y='140' width='180' height='40'/>
+              <line x1='140' y1='40' x2='140' y2='200'/>
+            </g>
+          </>);
+          case 'section': return (<>
+            <g stroke={fg} strokeOpacity='0.8' fill={fg} fillOpacity='0.08'>
+              <path d='M30 200 L30 100 L90 60 L150 100 L150 200 Z'/>
+              <path d='M150 200 L150 140 L220 140 L220 200 Z'/>
+            </g>
+          </>);
+          case 'model': return (<>
+            <g fill={fg} fillOpacity='0.9'>
+              <polygon points='40,160 140,100 240,160 240,220 40,220'/>
+              <polygon points='140,100 240,160 240,140 140,80' fill={ac} fillOpacity='0.9'/>
+            </g>
+            <line x1='0' y1='220' x2='300' y2='220' stroke={ac} strokeWidth='1'/>
+          </>);
+          case 'brick': return (<>
+            <g fill={fg} fillOpacity='0.7'>
+              {[...Array(8)].map((_,r)=>[...Array(10)].map((_,c)=>(
+                <rect key={r+'-'+c} x={10 + c*28 + (r%2?14:0)} y={10 + r*24} width='24' height='18' rx='1'/>
+              )))}
+            </g>
+          </>);
+          case 'texture': return (<>
+            <g stroke={fg} strokeOpacity='0.35'>
+              {[...Array(40)].map((_,i)=>(
+                <line key={i} x1={i*8} y1='0' x2={i*8 - 40} y2='240' strokeWidth='0.8'/>
+              ))}
+            </g>
+          </>);
+          case 'site': return (<>
+            <g fill={fg} fillOpacity='0.15'>
+              <ellipse cx='150' cy='220' rx='200' ry='40'/>
+            </g>
+            <g stroke={fg} strokeOpacity='0.6' fill='none'>
+              <path d='M40 180 L80 160 L130 170 L170 150 L230 160 L280 140'/>
+              <path d='M60 130 L90 110 L90 160'/>
+              <path d='M190 120 L220 100 L220 160'/>
+            </g>
+          </>);
+          case 'roof': return (<>
+            <g stroke={fg} strokeOpacity='0.7' fill='none'>
+              {[...Array(12)].map((_,i)=>(<line key={i} x1={20+i*22} y1='40' x2={20+i*22-30} y2='210'/>))}
+              <line x1='0' y1='40' x2='300' y2='40' strokeWidth='1.5'/>
+            </g>
+          </>);
+          case 'court': return (<>
+            <rect x='50' y='50' width='200' height='140' fill='none' stroke={fg} strokeOpacity='0.8'/>
+            <rect x='110' y='100' width='80' height='60' fill={ac} fillOpacity='0.35'/>
+            <g fill={fg} fillOpacity='0.4'>{[...Array(5)].map((_,i)=><circle key={i} cx={90 + i*30} cy={80} r='3'/>)}</g>
+          </>);
+          case 'shutter': return (<>
+            <g fill={fg} fillOpacity='0.85'>
+              {[...Array(14)].map((_,i)=>(<rect key={i} x='50' y={20+i*14} width='200' height='8'/>))}
+            </g>
+          </>);
+          case 'joint': return (<>
+            <g stroke={fg} strokeOpacity='0.9' fill='none' strokeWidth='1.2'>
+              <rect x='60' y='100' width='180' height='20'/>
+              <rect x='140' y='40' width='20' height='160'/>
+              <line x1='80' y1='100' x2='80' y2='120'/>
+              <line x1='220' y1='100' x2='220' y2='120'/>
+            </g>
+          </>);
+          case 'rain': return (<>
+            <g stroke={fg} strokeOpacity='0.55'>
+              {[...Array(40)].map((_,i)=>(<line key={i} x1={i*10} y1='0' x2={i*10 - 20} y2='240' strokeWidth='0.6'/>))}
+            </g>
+            <rect x='60' y='150' width='180' height='90' fill={ac} fillOpacity='0.5'/>
+          </>);
+          default: return null;
+        }
+      };
+      return (<>
+        <svg viewBox='0 0 300 240' preserveAspectRatio='xMidYMid slice' style={{background: bg}}>
+          {draw()}
+        </svg>
+        <div className='gallery-cap'>{label}</div>
+      </>);
+    }
+    function GalleryPage(){
+      const CATS = ['All','Sketches','Models','Site','Details'];
+      const [c, setC] = React.useState('All');
+      return (<>
+        <Nav currentPage='gallery' solid={true}/>
+        <PageHeader
+          eyebrow='§ Gallery — Process & Detail'
+          kicker='Updated monthly'
+          title='A quiet visual diary <em>of the work.</em>'
+          lede='Sketches, models, mock-ups, textures and site fragments — a slower, more personal companion to the project archive. No titles, no captions beyond the name of the thing.'
+        />
+        <section className='section'>
+          <div style={{maxWidth:'var(--container)', margin:'0 auto 32px', display:'flex', justifyContent:'space-between', alignItems:'baseline', flexWrap:'wrap', gap:12}}>
+            <div className='eyebrow'>§ 01 — {TILES.length} fragments</div>
+            <div className='projects-filter'>
+              {CATS.map(k=>(<button key={k} className={c===k?'active':''} onClick={()=>setC(k)}>{k}</button>))}
+            </div>
+          </div>
+          <div className='gallery-masonry'>
+            {TILES.map((t,i)=>(
+              <div className='gallery-tile' style={{['--ar']: t[2]}} key={i}>
+                <Tile label={t[0]} kind={t[1]}/>
+              </div>
+            ))}
+          </div>
+        </section>
+        <Footer/>
+      </>);
+    }
+    ReactDOM.createRoot(document.getElementById('app')).render(<GalleryPage/>);
+  </script>
+</body>
+</html>

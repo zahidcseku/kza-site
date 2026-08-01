@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Awards — KZA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Archivo:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=5"/>
+</head>
+<body data-palette="sand">
+  <div id="app"></div>
+  <script>document.documentElement.setAttribute('data-palette','sand');</script>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script type="text/babel" src="src/data.jsx"></script>
+  <script type="text/babel" src="src/logo.jsx"></script>
+  <script type="text/babel" src="src/nav.jsx"></script>
+  <script type="text/babel" src="src/footer.jsx"></script>
+  <script type="text/babel" src="src/ribbon.jsx"></script>
+  <script type="text/babel" src="src/page-header.jsx"></script>
+  <script type="text/babel">
+    const AWARDS = [
+      ['2025','WA Award · Residential, Gold',         'Sonadanga Residence',   'World Architecture Community'],
+      ['2024','Archmarathon · Cultural Finalist',     'The Copper Mosque',     'Archmarathon, Milan'],
+      ['2022','Aga Khan Award · Nomination',          'Haor Reading Rooms',    'Aga Khan Trust for Culture'],
+      ['2022','AR Emerging Architecture',             'Forty Four Courtyards', 'Architectural Review'],
+      ['2021','Berger Award · Built Residential',     'Forty Four Courtyards', 'Berger Paints Bangladesh'],
+      ['2020','Commonwealth Association · Citation',  'Jute Exchange',         'CAA'],
+      ['2019','UNESCO Asia-Pacific · Honourable Mention','Sundarban Station', 'UNESCO'],
+      ['2018','AR House Award · Highly Commended',    'Delta Lantern Villas',  'Architectural Review'],
+      ['2014','Berger Award · Emerging Practice',     '—',                     'Berger Paints Bangladesh'],
+      ['2013','Holcim Awards South Asia · Bronze',    'Rupsha Pavilion (early)', 'Holcim Foundation'],
+    ];
+    const PUBLICATIONS = [
+      ['Domus India',            'A Studio in the Delta',              'Feb 2024'],
+      ['Monocle',                'The Slow Architects',                'Nov 2023'],
+      ['Wallpaper*',             'Bangladesh Now',                     'Sep 2023'],
+      ['The Architectural Review','Forty Four Courtyards',             'May 2022'],
+      ['Dezeen',                 'Haor Reading Rooms, in photographs', 'Jan 2022'],
+      ['Hinge Magazine',         'Salt & Tide, a resort revisited',    'Apr 2021'],
+    ];
+    function AwardsPage(){
+      return (<>
+        <Nav currentPage='awards' solid={true}/>
+        <PageHeader
+          eyebrow='§ Awards, Mentions & Press'
+          kicker='2013 – 2025'
+          title='We enter <em>two competitions a year.</em> Thirty-eight times, someone has written back.'
+          lede='A list of awards, citations and publications — including the Aga Khan Award for Architecture nomination in 2022, and two Berger Awards (2014, 2021). We keep kind notes from clients in a separate drawer.'
+        />
+        <section className='section'>
+          <div className='section-head'>
+            <span className='eyebrow'>§ 01 — Awards &amp; Honours</span>
+            <h2>Ten recent, <em>thirty-eight in total.</em></h2>
+          </div>
+          <div className='awards-table'>
+            {AWARDS.map(([y,a,p,o],i)=>(
+              <div className='awards-row' key={i}>
+                <div className='year'>{y}</div>
+                <div className='award'>{a}</div>
+                <div className='proj'>{p}</div>
+                <div className='org'>{o}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+        <section className='section alt'>
+          <div className='section-head'>
+            <span className='eyebrow'>§ 02 — Selected Press</span>
+            <h2>Words from <em>kind editors.</em></h2>
+          </div>
+          <div className='awards-table'>
+            {PUBLICATIONS.map(([pub,title,date],i)=>(
+              <div className='awards-row' key={i}>
+                <div className='year'>{date}</div>
+                <div className='award'>{pub}</div>
+                <div className='proj'>&ldquo;{title}&rdquo;</div>
+                <div className='org'>Read →</div>
+              </div>
+            ))}
+          </div>
+        </section>
+        <Footer/>
+      </>);
+    }
+    ReactDOM.createRoot(document.getElementById('app')).render(<AwardsPage/>);
+  </script>
+</body>
+</html>
