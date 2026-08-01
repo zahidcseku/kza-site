@@ -16,6 +16,9 @@ export type HeroSlide = {
   loc: string;
   year: string;
   img: string;
+  blurb: string;
+  cta: string;
+  ctaHref: string;
 };
 
 export type Stat = {
@@ -118,11 +121,51 @@ export const PROJECTS: Project[] = PROJECT_SEEDS.map((p, i) => ({
 }));
 
 const HERO_SEEDS: HeroSeed[] = [
-  { label: "01", title: "Sonadanga Residence", loc: "Khulna", year: "2024" },
-  { label: "02", title: "Rupsha Pavilion", loc: "Khulna", year: "2023" },
-  { label: "03", title: "Haor Reading Rooms", loc: "Sunamganj", year: "2022" },
-  { label: "04", title: "The Copper Mosque", loc: "Tangail", year: "2020" },
-  { label: "05", title: "Salt & Tide", loc: "Cox's Bazar", year: "2021" },
+  {
+    label: "01",
+    title: "Sonadanga Residence",
+    loc: "Khulna",
+    year: "2024",
+    blurb: "A studio of architects in Khulna — making places that belong to their weather and their people.",
+    cta: "Find out more about the studio",
+    ctaHref: "/about",
+  },
+  {
+    label: "02",
+    title: "Rupsha Pavilion",
+    loc: "Khulna",
+    year: "2023",
+    blurb: "We design for the climate first. Everything else is a consequence of that first honest conversation with place.",
+    cta: "Find out more about our projects",
+    ctaHref: "/projects",
+  },
+  {
+    label: "03",
+    title: "Haor Reading Rooms",
+    loc: "Sunamganj",
+    year: "2022",
+    blurb: "Brick that learns the weather. Light that knows the hour. Rooms that flood once a year, on purpose.",
+    cta: "Find out more about the studio",
+    ctaHref: "/about",
+  },
+  {
+    label: "04",
+    title: "The Copper Mosque",
+    loc: "Tangail",
+    year: "2020",
+    blurb: "We draw every house nine times before we pour — quiet buildings, on loud sites.",
+    cta: "Find out more about our projects",
+    ctaHref: "/projects",
+  },
+  {
+    label: "05",
+    title: "Salt & Tide",
+    loc: "Cox's Bazar",
+    year: "2021",
+    blurb: "Eighteen years of drawing, building, and revisiting — carefully, from a small house in Sonadanga.",
+    cta: "Find out more about the studio",
+    ctaHref: "/about",
+  },
 ];
 
 export const HERO_SLIDES: HeroSlide[] = HERO_SEEDS.map((s, i) => ({
