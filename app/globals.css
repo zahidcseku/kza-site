@@ -122,7 +122,7 @@ p { line-height: 1.5; }
 .nav-drawer-status { display: inline-flex; align-items: center; gap: 10px; }
 .nav-drawer-status .dot { width: 6px; height: 6px; border-radius: 50%; background: #3DCF8E; box-shadow: 0 0 0 3px color-mix(in oklab, #3DCF8E 30%, transparent); }
 
-/* ---------- HERO (sequential zoom) ---------- */
+/* ---------- HERO (sequential zoom, pure CSS) ---------- */
 .hero {
   position: relative;
   height: 100vh; min-height: 640px;
@@ -130,27 +130,36 @@ p { line-height: 1.5; }
   background: #0A0908; color: #fff;
 }
 .hero-stage { position: absolute; inset: 0; }
+
+/* Each panel runs the same 33s cycle (6 × 5.5s slots), offset in time so
+   images crossfade into one another in order. Panel 1 uses a negative delay
+   so it is already visible at first paint — no black flash on load. */
 .hero-panel {
   position: absolute; inset: 0;
   opacity: 0;
-  transition: opacity 1.5s cubic-bezier(.4,0,.2,1);
+  animation: heroSeq 33s cubic-bezier(.4,0,.2,1) infinite;
+  will-change: opacity, transform;
 }
-.hero-panel.active { opacity: 1; }
-.hero-panel .hero-img {
-  object-fit: cover;
-  transform: scale(1.05);
-  will-change: transform;
+.hero-panel:nth-child(1) { animation-delay: -1.5s; }
+.hero-panel:nth-child(2) { animation-delay: 4s; }
+.hero-panel:nth-child(3) { animation-delay: 9.5s; }
+.hero-panel:nth-child(4) { animation-delay: 15s; }
+.hero-panel:nth-child(5) { animation-delay: 20.5s; }
+.hero-panel:nth-child(6) { animation-delay: 26s; }
+.hero-panel .hero-img { object-fit: cover; }
+
+/* One slot = 5.5s = 16.66% of 33s. Crossfade = 1.5s = 4.5%. The outgoing
+   fade (16.66% → 21.2%) overlaps the next panel's incoming fade. */
+@keyframes heroSeq {
+  0%      { opacity: 0; transform: scale(1.06); }
+  4.5%    { opacity: 1; transform: scale(1.08); }
+  16.66%  { opacity: 1; transform: scale(1.20); }
+  21.2%   { opacity: 0; transform: scale(1.22); }
+  100%    { opacity: 0; transform: scale(1.06); }
 }
-/* The zoom plays fresh each time a panel becomes active. */
-.hero-panel.active .hero-img {
-  animation: heroZoom 5.5s cubic-bezier(.2,.65,.2,1) forwards;
-}
-@keyframes heroZoom {
-  from { transform: scale(1.05); }
-  to { transform: scale(1.22); }
-}
+
 .hero-vignette {
-  position: absolute; inset: 0; pointer-events: none;
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
   background:
     radial-gradient(ellipse at center, rgba(8,7,6,0.28) 0%, rgba(8,7,6,0.12) 45%, rgba(8,7,6,0.68) 100%),
     linear-gradient(180deg, rgba(8,7,6,0.5) 0%, rgba(8,7,6,0) 26%, rgba(8,7,6,0) 74%, rgba(8,7,6,0.5) 100%);
@@ -212,7 +221,7 @@ p { line-height: 1.5; }
 }
 .hero-cta:hover { color: #fff; border-bottom-color: #fff; }
 
-/* Thin progress bar — remounts per slide so the fill restarts. */
+/* Progress bar — fills once per slot (5.5s), loops in sync with the sequence. */
 .hero-progress {
   position: absolute; left: 0; right: 0; bottom: 0; z-index: 4;
   height: 2px;
@@ -221,18 +230,22 @@ p { line-height: 1.5; }
 .hero-progress-fill {
   display: block; height: 100%; width: 0;
   background: rgba(255,255,255,0.85);
-  animation: heroProgress 5.5s linear forwards;
+  animation: heroProgress 5.5s linear infinite;
 }
-@keyframes heroProgress { from { width: 0; } to { width: 100%; } }
+@keyframes heroProgress {
+  0% { width: 0; }
+  100% { width: 100%; }
+}
 
 @media (max-width: 640px) {
   .hero-headline { max-width: 14ch; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-panel.active .hero-img,
+  .hero-panel,
   .hero-progress-fill { animation: none !important; }
-  .hero-panel .hero-img { transform: none; }
+  .hero-panel { opacity: 0; transform: none; }
+  .hero-panel:nth-child(1) { opacity: 1; }
   .hero-overlay .hero-eyebrow,
   .hero-overlay .hero-headline,
   .hero-overlay .hero-sub,
