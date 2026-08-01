@@ -235,17 +235,47 @@ p { line-height: 1.5; }
   pointer-events: none;
 }
 .hero-overlay .hero-cta { pointer-events: auto; }
+
+/* Logo — rendered solid white over the dark imagery via a CSS filter
+   (the source PNG is dark-on-transparent and wouldn't read otherwise). */
+.hero-logo {
+  width: clamp(72px, 8vw, 116px);
+  height: auto;
+  margin-bottom: 30px;
+  filter: brightness(0) invert(1);
+  opacity: 0.94;
+}
+
+/* Rotating dialogs: three statements stack in one grid cell and crossfade
+   in sequence over the 33s image cycle (each held ~11s). Lifts in/out for
+   a quiet premium feel. */
+.hero-dialogs { display: grid; justify-items: center; width: 100%; }
+.hero-dialog {
+  grid-area: 1 / 1;
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center;
+  opacity: 0;
+  animation: dialogSeq 33s cubic-bezier(.4,0,.2,1) infinite;
+  animation-delay: calc(var(--i) * 11s);
+  will-change: opacity, transform;
+}
+@keyframes dialogSeq {
+  0%      { opacity: 0; transform: translateY(22px); }
+  4.5%    { opacity: 1; transform: translateY(0); }
+  30%     { opacity: 1; transform: translateY(0); }
+  36%     { opacity: 0; transform: translateY(-22px); }
+  100%    { opacity: 0; transform: translateY(22px); }
+}
+
 .hero-overlay .hero-eyebrow,
-.hero-overlay .hero-headline,
-.hero-overlay .hero-sub,
-.hero-overlay .hero-cta {
+.hero-overlay .hero-cta,
+.hero-overlay .hero-logo {
   animation: heroFadeUp 0.95s cubic-bezier(.2,.7,.2,1) both;
   will-change: transform, opacity;
 }
-.hero-overlay .hero-eyebrow { animation-delay: 0.4s; }
-.hero-overlay .hero-headline { animation-delay: 0.55s; animation-duration: 1.1s; }
-.hero-overlay .hero-sub { animation-delay: 0.75s; }
-.hero-overlay .hero-cta { animation-delay: 0.9s; }
+.hero-overlay .hero-logo    { animation-delay: 0.2s; }
+.hero-overlay .hero-eyebrow { animation-delay: 0.45s; }
+.hero-overlay .hero-cta     { animation-delay: 0.9s; }
 @keyframes heroFadeUp {
   from { opacity: 0; transform: translateY(18px); }
   to { opacity: 1; transform: translateY(0); }
@@ -587,6 +617,9 @@ p { line-height: 1.5; }
      timelines ignore animation-duration), and ensure all content is visible. */
   .hero-wrap { height: auto !important; }
   .hero { position: relative !important; }
+  /* Collapse the rotating dialogs to the first one, static. */
+  .hero-dialog { animation: none !important; transform: none !important; }
+  .hero-dialog:not(:first-child) { display: none; }
   .ribbon-cell, .philosophy-eyebrow, .philosophy-body h2, .philosophy-signoff,
   .projects-head, .card, .feature-row, .projects-all,
   .footer-huge, .footer-cols, .footer-base,

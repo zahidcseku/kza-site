@@ -1,11 +1,43 @@
 import Image from "next/image";
 import { HERO_IMAGES } from "@/lib/data";
+import logoImg from "@/app/assets/logo.png";
+
+type Dialog = { headline: React.ReactNode; sub: string };
+
+// Three studio-voice statements that crossfade in sequence over the hero,
+// each held for ~1/3 of the 33s image cycle (≈11s).
+const DIALOGS: Dialog[] = [
+  {
+    headline: (
+      <>
+        A studio of architects in Khulna — making places that <em>belong.</em>
+      </>
+    ),
+    sub: "To their weather, and to their people.",
+  },
+  {
+    headline: (
+      <>
+        We design for the climate first. <em>Everything else</em> is a consequence.
+      </>
+    ),
+    sub: "Drawn nine times before we pour.",
+  },
+  {
+    headline: (
+      <>
+        Eighteen years of drawing, building, <em>and revisiting.</em>
+      </>
+    ),
+    sub: "Quietly, from a small house in Sonadanga.",
+  },
+];
 
 // Pure-CSS sequential zoom hero. A single keyframe animation (heroSeq) runs
 // on every panel; each panel is offset in time via :nth-child animation-delay
 // so the six images crossfade into one another in order, each zooming (Ken
-// Burns push-in) for the duration of its slot. No JavaScript required — the
-// sequence plays from CSS alone, so it works even if JS fails to hydrate.
+// Burns push-in) for the duration of its slot. The three dialogs rotate on
+// their own 33s cycle. No JavaScript required.
 export function Hero() {
   return (
     <div className="hero-wrap">
@@ -28,14 +60,31 @@ export function Hero() {
         <div className="hero-vignette" aria-hidden />
 
         <div className="hero-overlay">
+          <Image
+            src={logoImg}
+            alt="KZA — Kazi Zahin Architects"
+            width={logoImg.width}
+            height={logoImg.height}
+            priority
+            className="hero-logo"
+          />
           <span className="hero-eyebrow">
             § Kazi Zahin Architects — Est. 2008, Khulna
           </span>
-          <h1 className="hero-headline">
-            A studio of architects in Khulna — making places that{" "}
-            <em>belong.</em>
-          </h1>
-          <p className="hero-sub">To their weather, and to their people.</p>
+
+          <div className="hero-dialogs">
+            {DIALOGS.map((d, i) => (
+              <div
+                key={i}
+                className="hero-dialog"
+                style={{ "--i": i } as React.CSSProperties}
+              >
+                <h1 className="hero-headline">{d.headline}</h1>
+                <p className="hero-sub">{d.sub}</p>
+              </div>
+            ))}
+          </div>
+
           <a className="hero-cta" href="/about">
             Find out more about the studio →
           </a>
