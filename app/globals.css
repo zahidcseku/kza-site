@@ -306,6 +306,37 @@ p { line-height: 1.5; }
   100% { width: 100%; }
 }
 
+/* Down-arrow scroll cue at the foot of the hero — a thin line + chevron
+   that gently bobs, and fades out once the user starts scrolling. */
+.hero-scroll-cue {
+  position: absolute;
+  bottom: clamp(20px, 4vh, 40px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  color: rgba(255,255,255,0.82);
+  pointer-events: none;
+}
+.hero-scroll-cue-arrow {
+  display: block;
+  animation: scrollBob 1.8s ease-in-out infinite;
+}
+@keyframes scrollBob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(6px); }
+}
+@supports (animation-timeline: scroll()) {
+  .hero-scroll-cue {
+    animation: scrollCueFade linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0vh 25vh;
+  }
+}
+@keyframes scrollCueFade {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
 @media (max-width: 640px) {
   .hero-headline { max-width: 14ch; }
 }
@@ -321,6 +352,8 @@ p { line-height: 1.5; }
     opacity: 1 !important;
     transform: none !important;
   }
+  .hero-scroll-cue,
+  .hero-scroll-cue-arrow { animation: none !important; opacity: 1 !important; }
 }
 
 /* ---------- STATS RIBBON ---------- */

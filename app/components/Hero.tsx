@@ -87,6 +87,24 @@ export function Hero() {
         <div className="hero-progress" aria-hidden>
           <span className="hero-progress-fill" />
         </div>
+
+        {/* Down-arrow scroll cue at the foot of the hero. */}
+        <div className="hero-scroll-cue" aria-hidden>
+          <span className="hero-scroll-cue-arrow">
+            <svg
+              width="16"
+              height="22"
+              viewBox="0 0 16 22"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M8 0 V20 M2 14 L8 20 L14 14" />
+            </svg>
+          </span>
+        </div>
       </section>
     </div>
   );
