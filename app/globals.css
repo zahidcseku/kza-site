@@ -500,6 +500,33 @@ p { line-height: 1.5; }
 .nav-links a.active::after { right: 0; }
 .nav-links a.active { opacity: 1; }
 
+/* ---------- scroll reveal ---------- */
+/* Content fades + lifts into view as it enters the viewport. Pure CSS via
+   Scroll-Driven Animations (animation-timeline: view()); guarded by
+   @supports so older browsers just see the content. Natural scroll order
+   gives the stagger between sections, same-row blocks reveal together. */
+@keyframes revealUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@supports (animation-timeline: view()) {
+  .ribbon-cell,
+  .philosophy-eyebrow,
+  .philosophy-body h2,
+  .philosophy-signoff,
+  .projects-head,
+  .card,
+  .feature-row,
+  .projects-all,
+  .footer-huge,
+  .footer-cols,
+  .footer-base {
+    animation: revealUp linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 35%;
+  }
+}
+
 /* ---------- responsive ---------- */
 @media (max-width: 900px) {
   .ribbon-inner { grid-template-columns: 1fr 1fr; }
@@ -519,5 +546,15 @@ p { line-height: 1.5; }
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+  }
+  /* Force-disable the scroll-driven reveal + parallax (scroll timelines
+     ignore animation-duration), and ensure all content is visible. */
+  .ribbon-cell, .philosophy-eyebrow, .philosophy-body h2, .philosophy-signoff,
+  .projects-head, .card, .feature-row, .projects-all,
+  .footer-huge, .footer-cols, .footer-base,
+  .card-media .card-img, .hero-panel .hero-img {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
