@@ -127,11 +127,18 @@ p { line-height: 1.5; }
 .hero-stage { position: absolute; inset: 0; }
 .hero-panel {
   position: absolute; inset: 0;
-  background-size: cover; background-position: center;
-  opacity: 0; transform: scale(1.04);
-  transition: opacity 1.6s ease;
+  opacity: 0;
+  transition: opacity 1.6s cubic-bezier(.4,0,.2,1);
 }
-.hero-panel.active { opacity: 1; animation: heroZoom 9s ease-out forwards; }
+.hero-panel.active { opacity: 1; }
+.hero-panel .hero-img {
+  object-fit: cover;
+  transform: scale(1.04);
+  will-change: transform;
+}
+.hero-panel.active .hero-img {
+  animation: heroZoom 9s ease-out forwards;
+}
 @keyframes heroZoom { from { transform: scale(1.0); } to { transform: scale(1.10); } }
 .hero-vignette {
   position: absolute; inset: 0; pointer-events: none;
@@ -149,10 +156,36 @@ p { line-height: 1.5; }
   position: absolute; inset: 0;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   text-align: center; padding: 0 var(--gutter);
-  opacity: 0; transition: opacity 1.2s ease;
+  opacity: 0; transition: opacity 1s ease;
   pointer-events: none;
 }
 .hero-statement.active { opacity: 1; pointer-events: auto; }
+
+/* Staggered entrance for statement children */
+.hero-statement .hero-eyebrow,
+.hero-statement .hero-headline,
+.hero-statement .hero-cta {
+  opacity: 0;
+  transform: translateY(18px);
+  will-change: transform, opacity;
+}
+.hero-statement.active .hero-eyebrow {
+  animation: heroFadeUp 0.8s 0.15s cubic-bezier(.2,.7,.2,1) forwards;
+}
+.hero-statement.active .hero-headline {
+  animation: heroFadeUp 1.05s 0.32s cubic-bezier(.2,.7,.2,1) forwards;
+}
+.hero-statement.active .hero-cta {
+  animation: heroFadeUp 0.9s 0.62s cubic-bezier(.2,.7,.2,1) forwards;
+}
+@keyframes heroFadeUp { to { opacity: 1; transform: translateY(0); } }
+
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(255,255,255,0.72);
+  margin-bottom: 28px;
+}
 .hero-headline {
   font-family: var(--serif);
   font-size: clamp(34px, 5.8vw, 80px);
@@ -173,8 +206,33 @@ p { line-height: 1.5; }
 }
 .hero-cta:hover { color: #FFF; border-bottom-color: #FFF; }
 
+/* Progress bar — thin fill at the foot of the screen, remounts per slide */
+.hero-progress {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 4;
+  height: 2px;
+  background: rgba(255,255,255,0.12);
+}
+.hero-progress-fill {
+  display: block; height: 100%; width: 0;
+  background: rgba(255,255,255,0.85);
+  animation: heroProgress 6.5s linear forwards;
+}
+@keyframes heroProgress { from { width: 0; } to { width: 100%; } }
+
 @media (max-width: 640px) {
   .hero-headline { max-width: 16ch; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-panel.active .hero-img,
+  .hero-statement.active .hero-eyebrow,
+  .hero-statement.active .hero-headline,
+  .hero-statement.active .hero-cta,
+  .hero-progress-fill { animation: none !important; }
+  .hero-statement .hero-eyebrow,
+  .hero-statement .hero-headline,
+  .hero-statement .hero-cta { opacity: 1; transform: none; }
+  .hero-panel .hero-img { transform: none; }
 }
 
 /* ---------- STATS RIBBON ---------- */

@@ -1,5 +1,15 @@
-// Project + firm data. Imagery = striped SVG placeholders (replace with real
-// photography before launch). Ported from source/src/data.jsx.
+// Project + firm data. Project imagery = striped SVG placeholders (replace
+// with real photography before launch). Hero imagery = supplied photographs.
+// Ported from source/src/data.jsx.
+
+import type { StaticImageData } from "next/image";
+
+import heroResidential from "@/app/assets/hero/1_residential_cover.jpg";
+import heroCrystal from "@/app/assets/hero/Crystal-Tower-(5).png";
+import heroSayeedP from "@/app/assets/hero/LA-Sayeed-Tower-(5).jpg";
+import hero7 from "@/app/assets/hero/7.png";
+import heroSayeedL from "@/app/assets/hero/LA-Sayeed-Tower-(4).jpg";
+import heroB3 from "@/app/assets/hero/b3.png";
 
 export type Project = {
   id: string;
@@ -15,7 +25,8 @@ export type HeroSlide = {
   title: string;
   loc: string;
   year: string;
-  img: string;
+  img: StaticImageData;
+  alt: string;
   blurb: string;
   cta: string;
   ctaHref: string;
@@ -98,7 +109,6 @@ const mk = (i: number, title: string, sub: string) =>
   placeholder({ title, sub, ...pal(i) });
 
 type ProjectSeed = Omit<Project, "img">;
-type HeroSeed = Omit<HeroSlide, "img">;
 
 const PROJECT_SEEDS: ProjectSeed[] = [
   { id: "KZA-001", title: "Sonadanga Residence", tag: "Residential", year: "2024", loc: "Khulna, BD" },
@@ -120,58 +130,80 @@ export const PROJECTS: Project[] = PROJECT_SEEDS.map((p, i) => ({
   img: mk(i, p.title, p.id),
 }));
 
-const HERO_SEEDS: HeroSeed[] = [
+export const HERO_SLIDES: HeroSlide[] = [
   {
     label: "01",
     title: "Sonadanga Residence",
     loc: "Khulna",
     year: "2024",
-    blurb: "A studio of architects in Khulna — making places that belong to their weather and their people.",
+    img: heroResidential,
+    alt: "Sonadanga Residence, Khulna",
+    blurb:
+      "A studio of architects in Khulna — making places that belong to their weather and their people.",
     cta: "Find out more about the studio",
     ctaHref: "/about",
   },
   {
     label: "02",
-    title: "Rupsha Pavilion",
+    title: "Crystal Tower",
     loc: "Khulna",
     year: "2023",
-    blurb: "We design for the climate first. Everything else is a consequence of that first honest conversation with place.",
+    img: heroCrystal,
+    alt: "Crystal Tower",
+    blurb:
+      "We design for the climate first. Everything else is a consequence of that first honest conversation with place.",
     cta: "Find out more about our projects",
     ctaHref: "/projects",
   },
   {
     label: "03",
-    title: "Haor Reading Rooms",
-    loc: "Sunamganj",
+    title: "LA Sayeed Tower",
+    loc: "Khulna",
     year: "2022",
-    blurb: "Brick that learns the weather. Light that knows the hour. Rooms that flood once a year, on purpose.",
+    img: heroSayeedP,
+    alt: "LA Sayeed Tower",
+    blurb:
+      "Brick that learns the weather. Light that knows the hour. Rooms that hold the long monsoon.",
     cta: "Find out more about the studio",
     ctaHref: "/about",
   },
   {
     label: "04",
-    title: "The Copper Mosque",
-    loc: "Tangail",
-    year: "2020",
-    blurb: "We draw every house nine times before we pour — quiet buildings, on loud sites.",
+    title: "Delta Project",
+    loc: "Khulna",
+    year: "2021",
+    img: hero7,
+    alt: "Architectural project, Khulna",
+    blurb:
+      "Quiet buildings, on loud sites. We draw every house nine times before we pour.",
     cta: "Find out more about our projects",
     ctaHref: "/projects",
   },
   {
     label: "05",
-    title: "Salt & Tide",
-    loc: "Cox's Bazar",
-    year: "2021",
-    blurb: "Eighteen years of drawing, building, and revisiting — carefully, from a small house in Sonadanga.",
+    title: "LA Sayeed Tower",
+    loc: "Khulna",
+    year: "2020",
+    img: heroSayeedL,
+    alt: "LA Sayeed Tower, elevation",
+    blurb:
+      "Eighteen years of drawing, building, and revisiting — carefully, from a small house in Sonadanga.",
     cta: "Find out more about the studio",
     ctaHref: "/about",
   },
+  {
+    label: "06",
+    title: "Studio Work",
+    loc: "Khulna",
+    year: "2019",
+    img: heroB3,
+    alt: "Studio architectural work, Khulna",
+    blurb:
+      "Architecture as a slow conversation with place, light, and the long monsoon.",
+    cta: "Find out more about our projects",
+    ctaHref: "/projects",
+  },
 ];
-
-export const HERO_SLIDES: HeroSlide[] = HERO_SEEDS.map((s, i) => ({
-  ...s,
-  img: mk(i, s.title, s.label + " · " + s.loc),
-}));
 
 export const TAGS = [
   "All",
