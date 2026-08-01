@@ -1,64 +1,47 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { HERO_IMAGES } from "@/lib/data";
 
-// Parallax depth per tile (px). Tiles nearer the viewer drift more.
-const DEPTHS = [6, 12, 8, 10, 5, 14];
+const SLIDE_MS = 5500;
 
+// Single sequential animation: one full-bleed image at a time, each zooming
+// (Ken Burns push-in) for the duration of its slide, crossfading to the next.
+// Static studio statement overlaid; thin progress bar marks the sequence.
 export function Hero() {
-  const ref = useRef<HTMLElement>(null);
+  const slides = HERO_IMAGES;
+  const [idx, setIdx] = useState(0);
 
-  // Parallax is a progressive enhancement — the reveal itself is CSS-only,
-  // so the montage is visible even before/without JS hydration.
-  const onMove = (e: React.MouseEvent) => {
-    const el = ref.current;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    const mx = ((e.clientX - r.left) / r.width) * 2 - 1; // -1..1
-    const my = ((e.clientY - r.top) / r.height) * 2 - 1;
-    el.style.setProperty("--mx", mx.toFixed(3));
-    el.style.setProperty("--my", my.toFixed(3));
-  };
-
-  const onLeave = () => {
-    const el = ref.current;
-    if (!el) return;
-    el.style.setProperty("--mx", "0");
-    el.style.setProperty("--my", "0");
-  };
+  useEffect(() => {
+    const t = setInterval(
+      () => setIdx((i) => (i + 1) % slides.length),
+      SLIDE_MS,
+    );
+    return () => clearInterval(t);
+  }, [slides.length]);
 
   return (
-    <section
-      ref={ref}
-      id="home"
-      className="hero"
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
-    >
-      <div className="hero-grid">
-        {HERO_IMAGES.map((t, i) => (
+    <section id="home" className="hero">
+      <div className="hero-stage">
+        {slides.map((s, i) => (
           <div
             key={i}
-            className="hero-cell"
-            style={{ "--i": i, "--depth": DEPTHS[i] } as React.CSSProperties}
+            className={`hero-panel${i === idx ? " active" : ""}`}
+            aria-hidden={i !== idx}
           >
-            <div className="hero-cell-parallax">
-              <Image
-                src={t.img}
-                alt=""
-                fill
-                sizes="(max-width: 900px) 50vw, 34vw"
-                priority={i < 3}
-                className="hero-cell-img"
-              />
-            </div>
+            <Image
+              src={s.img}
+              alt=""
+              fill
+              sizes="100vw"
+              priority={i === 0}
+              className="hero-img"
+            />
           </div>
         ))}
+        <div className="hero-vignette" aria-hidden />
       </div>
-
-      <div className="hero-veil" aria-hidden />
 
       <div className="hero-overlay">
         <span className="hero-eyebrow">
@@ -71,6 +54,10 @@ export function Hero() {
         <a className="hero-cta" href="/about">
           Find out more about the studio →
         </a>
+      </div>
+
+      <div className="hero-progress" aria-hidden>
+        <span className="hero-progress-fill" key={idx} />
       </div>
     </section>
   );
