@@ -234,7 +234,6 @@ p { line-height: 1.5; }
   text-align: center; padding: 0 var(--gutter);
   pointer-events: none;
 }
-.hero-overlay .hero-cta { pointer-events: auto; }
 
 /* Logo (finale) — the closing brand mark. Hidden while the dialogs play,
    then fades + scales in large and stays. Rendered solid white over the
@@ -274,24 +273,6 @@ p { line-height: 1.5; }
   100% { opacity: 0; transform: translateY(-22px); }
 }
 
-.hero-overlay .hero-eyebrow,
-.hero-overlay .hero-cta {
-  animation: heroFadeUp 0.95s cubic-bezier(.2,.7,.2,1) both;
-  will-change: transform, opacity;
-}
-.hero-overlay .hero-eyebrow { animation-delay: 0.45s; }
-.hero-overlay .hero-cta     { animation-delay: 0.9s; }
-@keyframes heroFadeUp {
-  from { opacity: 0; transform: translateY(18px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.hero-eyebrow {
-  font-family: var(--mono);
-  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
-  color: rgba(255,255,255,0.78);
-  margin-bottom: 28px;
-}
 .hero-headline {
   font-family: var(--serif);
   font-size: clamp(36px, 6vw, 92px);
@@ -308,16 +289,6 @@ p { line-height: 1.5; }
   color: rgba(255,255,255,0.82);
   max-width: 30ch;
 }
-.hero-cta {
-  margin-top: 40px;
-  font-family: var(--mono);
-  font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
-  color: rgba(255,255,255,0.92);
-  border-bottom: 1px solid rgba(255,255,255,0.5);
-  padding-bottom: 4px;
-  transition: color .25s, border-color .25s;
-}
-.hero-cta:hover { color: #fff; border-bottom-color: #fff; }
 
 /* Progress bar — fills once per slot (5.5s), loops in sync with the sequence. */
 .hero-progress {
@@ -344,10 +315,8 @@ p { line-height: 1.5; }
   .hero-progress-fill { animation: none !important; }
   .hero-panel { opacity: 0; transform: none; }
   .hero-panel:nth-child(1) { opacity: 1; }
-  .hero-overlay .hero-eyebrow,
   .hero-overlay .hero-headline,
-  .hero-overlay .hero-sub,
-  .hero-overlay .hero-cta {
+  .hero-overlay .hero-sub {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;

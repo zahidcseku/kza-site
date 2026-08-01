@@ -60,10 +60,6 @@ export function Hero() {
         <div className="hero-vignette" aria-hidden />
 
         <div className="hero-overlay">
-          <span className="hero-eyebrow">
-            § Kazi Zahin Architects — Est. 2008, Khulna
-          </span>
-
           <div className="hero-dialogs">
             {DIALOGS.map((d, i) => (
               <div
@@ -86,10 +82,6 @@ export function Hero() {
               className="hero-finale-logo"
             />
           </div>
-
-          <a className="hero-cta" href="/about">
-            Find out more about the studio →
-          </a>
         </div>
 
         <div className="hero-progress" aria-hidden>
