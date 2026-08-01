@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import Image from "next/image";
 import { HERO_IMAGES } from "@/lib/data";
 
@@ -9,14 +9,9 @@ const DEPTHS = [6, 12, 8, 10, 5, 14];
 
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
-  const [revealed, setRevealed] = useState(false);
 
-  useEffect(() => {
-    // Trigger the staggered reveal on the next frame.
-    const r = requestAnimationFrame(() => setRevealed(true));
-    return () => cancelAnimationFrame(r);
-  }, []);
-
+  // Parallax is a progressive enhancement — the reveal itself is CSS-only,
+  // so the montage is visible even before/without JS hydration.
   const onMove = (e: React.MouseEvent) => {
     const el = ref.current;
     if (!el) return;
@@ -38,7 +33,7 @@ export function Hero() {
     <section
       ref={ref}
       id="home"
-      className={`hero${revealed ? " revealed" : ""}`}
+      className="hero"
       onMouseMove={onMove}
       onMouseLeave={onLeave}
     >
