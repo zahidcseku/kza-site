@@ -236,44 +236,49 @@ p { line-height: 1.5; }
 }
 .hero-overlay .hero-cta { pointer-events: auto; }
 
-/* Logo — rendered solid white over the dark imagery via a CSS filter
-   (the source PNG is dark-on-transparent and wouldn't read otherwise). */
-.hero-logo {
-  width: clamp(72px, 8vw, 116px);
+/* Logo (finale) — the closing brand mark. Hidden while the dialogs play,
+   then fades + scales in large and stays. Rendered solid white over the
+   dark imagery via a CSS filter (source PNG is dark-on-transparent). */
+.hero-finale-logo {
+  grid-area: 1 / 1;
+  width: clamp(200px, 24vw, 340px);
   height: auto;
-  margin-bottom: 30px;
   filter: brightness(0) invert(1);
-  opacity: 0.94;
+  opacity: 0;
+  transform: scale(0.92);
+  animation: finaleLogoIn 1.6s cubic-bezier(.2,.7,.2,1) 15s both;
+  will-change: opacity, transform;
+}
+@keyframes finaleLogoIn {
+  to { opacity: 0.96; transform: scale(1); }
 }
 
-/* Rotating dialogs: three statements stack in one grid cell and crossfade
-   in sequence over the 33s image cycle (each held ~11s). Lifts in/out for
-   a quiet premium feel. */
+/* Dialogs (one-shot): three statements crossfade in sequence, each held
+   ~4s within a 5s slot (15s total). After they finish the finale logo
+   takes over. Each dialog stacks in one grid cell. */
 .hero-dialogs { display: grid; justify-items: center; width: 100%; }
 .hero-dialog {
   grid-area: 1 / 1;
   display: flex; flex-direction: column; align-items: center;
   text-align: center;
   opacity: 0;
-  animation: dialogSeq 33s cubic-bezier(.4,0,.2,1) infinite;
-  animation-delay: calc(var(--i) * 11s);
+  animation: dialogSeq 15s cubic-bezier(.4,0,.2,1) both;
+  animation-delay: calc(var(--i) * 5s);
   will-change: opacity, transform;
 }
 @keyframes dialogSeq {
-  0%      { opacity: 0; transform: translateY(22px); }
-  4.5%    { opacity: 1; transform: translateY(0); }
-  30%     { opacity: 1; transform: translateY(0); }
-  36%     { opacity: 0; transform: translateY(-22px); }
-  100%    { opacity: 0; transform: translateY(22px); }
+  0%   { opacity: 0; transform: translateY(22px); }
+  3%   { opacity: 1; transform: translateY(0); }
+  28%  { opacity: 1; transform: translateY(0); }
+  36%  { opacity: 0; transform: translateY(-22px); }
+  100% { opacity: 0; transform: translateY(-22px); }
 }
 
 .hero-overlay .hero-eyebrow,
-.hero-overlay .hero-cta,
-.hero-overlay .hero-logo {
+.hero-overlay .hero-cta {
   animation: heroFadeUp 0.95s cubic-bezier(.2,.7,.2,1) both;
   will-change: transform, opacity;
 }
-.hero-overlay .hero-logo    { animation-delay: 0.2s; }
 .hero-overlay .hero-eyebrow { animation-delay: 0.45s; }
 .hero-overlay .hero-cta     { animation-delay: 0.9s; }
 @keyframes heroFadeUp {
@@ -617,9 +622,13 @@ p { line-height: 1.5; }
      timelines ignore animation-duration), and ensure all content is visible. */
   .hero-wrap { height: auto !important; }
   .hero { position: relative !important; }
-  /* Collapse the rotating dialogs to the first one, static. */
-  .hero-dialog { animation: none !important; transform: none !important; }
-  .hero-dialog:not(:first-child) { display: none; }
+  /* Skip the dialog sequence + finale reveal; show the finale logo statically. */
+  .hero-dialog { animation: none !important; }
+  .hero-finale-logo {
+    animation: none !important;
+    opacity: 0.96 !important;
+    transform: none !important;
+  }
   .ribbon-cell, .philosophy-eyebrow, .philosophy-body h2, .philosophy-signoff,
   .projects-head, .card, .feature-row, .projects-all,
   .footer-huge, .footer-cols, .footer-base,

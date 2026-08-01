@@ -60,14 +60,6 @@ export function Hero() {
         <div className="hero-vignette" aria-hidden />
 
         <div className="hero-overlay">
-          <Image
-            src={logoImg}
-            alt="KZA — Kazi Zahin Architects"
-            width={logoImg.width}
-            height={logoImg.height}
-            priority
-            className="hero-logo"
-          />
           <span className="hero-eyebrow">
             § Kazi Zahin Architects — Est. 2008, Khulna
           </span>
@@ -83,6 +75,16 @@ export function Hero() {
                 <p className="hero-sub">{d.sub}</p>
               </div>
             ))}
+
+            {/* Finale: large brand mark, revealed once the dialogs have played. */}
+            <Image
+              src={logoImg}
+              alt="KZA — Kazi Zahin Architects"
+              width={logoImg.width}
+              height={logoImg.height}
+              priority
+              className="hero-finale-logo"
+            />
           </div>
 
           <a className="hero-cta" href="/about">
