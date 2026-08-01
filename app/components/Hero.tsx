@@ -92,16 +92,16 @@ export function Hero() {
         <div className="hero-scroll-cue" aria-hidden>
           <span className="hero-scroll-cue-arrow">
             <svg
-              width="16"
-              height="22"
-              viewBox="0 0 16 22"
+              width="24"
+              height="15"
+              viewBox="0 0 24 15"
               fill="none"
               stroke="currentColor"
-              strokeWidth="1.2"
+              strokeWidth="1.6"
               strokeLinecap="round"
               strokeLinejoin="round"
             >
-              <path d="M8 0 V20 M2 14 L8 20 L14 14" />
+              <path d="M2 2 L12 12 L22 2" />
             </svg>
           </span>
         </div>
