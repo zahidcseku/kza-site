@@ -158,6 +158,23 @@ p { line-height: 1.5; }
 .hero-panel:nth-child(6) { animation-delay: 26s; }
 .hero-panel .hero-img { object-fit: cover; }
 
+/* Scroll parallax on the hero image — drifts as you scroll past the hero,
+   adding depth against the receding overlay text. The panel is extended
+   vertically (inside @supports) so the image has translate room without
+   showing edges. Omitted where animation-timeline is unsupported. */
+@supports (animation-timeline: scroll()) {
+  .hero-panel { inset: -8% 0; }
+  .hero-panel .hero-img {
+    animation: heroScrollParallax linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0vh 100vh;
+  }
+}
+@keyframes heroScrollParallax {
+  from { transform: translateY(-4%); }
+  to   { transform: translateY(5%); }
+}
+
 /* One slot = 5.5s = 16.66% of 33s. Crossfade = 1.5s = 4.5%. The outgoing
    fade (16.66% → 21.2%) overlaps the next panel's incoming fade. */
 @keyframes heroSeq {
@@ -359,6 +376,22 @@ p { line-height: 1.5; }
   filter: saturate(0.92);
 }
 .card:hover .card-media .card-img { transform: scale(1.04); filter: saturate(1.05); }
+
+/* Scroll parallax on project tiles — image drifts within its frame as the
+   card traverses the viewport. Gracefully omitted where animation-timeline
+   is unsupported (hover scale above remains the effect there). */
+@supports (animation-timeline: view()) {
+  .card-media .card-img {
+    animation: cardParallax linear both;
+    animation-timeline: view();
+    animation-range: entry exit;
+  }
+  .card:hover .card-media .card-img { filter: saturate(1.1) brightness(1.04); }
+}
+@keyframes cardParallax {
+  from { transform: translateY(-6%) scale(1.12); }
+  to   { transform: translateY(6%)  scale(1.12); }
+}
 .card-index {
   position: absolute; top: 14px; left: 14px;
   font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,.9);
