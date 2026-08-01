@@ -1,71 +1,81 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { HERO_SLIDES } from "@/lib/data";
+import { HERO_IMAGES } from "@/lib/data";
 
-const SLIDE_MS = 6500;
+// Parallax depth per tile (px). Tiles nearer the viewer drift more.
+const DEPTHS = [6, 12, 8, 10, 5, 14];
 
-// Heatherwick-style premium hero: full-bleed rotating photography with slow
-// Ken Burns zoom, a centered cross-fading poetic statement that staggers in,
-// and a thin progress bar at the foot of the screen.
 export function Hero() {
-  const slides = HERO_SLIDES;
-  const [idx, setIdx] = useState(0);
+  const ref = useRef<HTMLElement>(null);
+  const [revealed, setRevealed] = useState(false);
 
   useEffect(() => {
-    const t = setInterval(
-      () => setIdx((i) => (i + 1) % slides.length),
-      SLIDE_MS,
-    );
-    return () => clearInterval(t);
-  }, [slides.length]);
+    // Trigger the staggered reveal on the next frame.
+    const r = requestAnimationFrame(() => setRevealed(true));
+    return () => cancelAnimationFrame(r);
+  }, []);
+
+  const onMove = (e: React.MouseEvent) => {
+    const el = ref.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const mx = ((e.clientX - r.left) / r.width) * 2 - 1; // -1..1
+    const my = ((e.clientY - r.top) / r.height) * 2 - 1;
+    el.style.setProperty("--mx", mx.toFixed(3));
+    el.style.setProperty("--my", my.toFixed(3));
+  };
+
+  const onLeave = () => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.setProperty("--mx", "0");
+    el.style.setProperty("--my", "0");
+  };
 
   return (
-    <section id="home" className="hero">
-      {/* Background: cross-fading full-bleed images with slow zoom */}
-      <div className="hero-stage">
-        {slides.map((s, i) => (
+    <section
+      ref={ref}
+      id="home"
+      className={`hero${revealed ? " revealed" : ""}`}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+    >
+      <div className="hero-grid">
+        {HERO_IMAGES.map((t, i) => (
           <div
-            key={s.label}
-            className={`hero-panel${i === idx ? " active" : ""}`}
-            aria-hidden={i !== idx}
+            key={i}
+            className="hero-cell"
+            style={{ "--i": i, "--depth": DEPTHS[i] } as React.CSSProperties}
           >
-            <Image
-              src={s.img}
-              alt={s.alt}
-              fill
-              sizes="100vw"
-              priority={i === 0}
-              className="hero-img"
-            />
-          </div>
-        ))}
-        <div className="hero-vignette" aria-hidden />
-      </div>
-
-      {/* Centered, cross-fading statement + CTA (staggered fade-up) */}
-      <div className="hero-center">
-        {slides.map((s, i) => (
-          <div
-            key={s.label}
-            className={`hero-statement${i === idx ? " active" : ""}`}
-            aria-hidden={i !== idx}
-          >
-            <span className="hero-eyebrow">
-              {s.label} — {s.title}, {s.loc}
-            </span>
-            <h1 className="hero-headline">{s.blurb}</h1>
-            <a className="hero-cta" href={s.ctaHref}>
-              {s.cta} →
-            </a>
+            <div className="hero-cell-parallax">
+              <Image
+                src={t.img}
+                alt=""
+                fill
+                sizes="(max-width: 900px) 50vw, 34vw"
+                priority={i < 3}
+                className="hero-cell-img"
+              />
+            </div>
           </div>
         ))}
       </div>
 
-      {/* Thin progress bar — remounts per slide so the animation restarts */}
-      <div className="hero-progress" aria-hidden>
-        <span className="hero-progress-fill" key={idx} />
+      <div className="hero-veil" aria-hidden />
+
+      <div className="hero-overlay">
+        <span className="hero-eyebrow">
+          § Kazi Zahin Architects — Est. 2008, Khulna
+        </span>
+        <h1 className="hero-headline">
+          A studio of architects in Khulna — making places that <em>belong.</em>
+        </h1>
+        <p className="hero-sub">To their weather, and to their people.</p>
+        <a className="hero-cta" href="/about">
+          Find out more about the studio →
+        </a>
       </div>
     </section>
   );

@@ -20,16 +20,9 @@ export type Project = {
   img: StaticImageData;
 };
 
-export type HeroSlide = {
-  label: string;
-  title: string;
-  loc: string;
-  year: string;
+export type HeroImage = {
   img: StaticImageData;
   alt: string;
-  blurb: string;
-  cta: string;
-  ctaHref: string;
 };
 
 export type Stat = {
@@ -128,79 +121,14 @@ export const PROJECTS: Project[] = PROJECT_SEEDS.map((p, i) => ({
   img: PROJECT_IMAGES[i % PROJECT_IMAGES.length],
 }));
 
-export const HERO_SLIDES: HeroSlide[] = [
-  {
-    label: "01",
-    title: "Sonadanga Residence",
-    loc: "Khulna",
-    year: "2024",
-    img: heroResidential,
-    alt: "Sonadanga Residence, Khulna",
-    blurb:
-      "A studio of architects in Khulna — making places that belong to their weather and their people.",
-    cta: "Find out more about the studio",
-    ctaHref: "/about",
-  },
-  {
-    label: "02",
-    title: "Crystal Tower",
-    loc: "Khulna",
-    year: "2023",
-    img: heroCrystal,
-    alt: "Crystal Tower",
-    blurb:
-      "We design for the climate first. Everything else is a consequence of that first honest conversation with place.",
-    cta: "Find out more about our projects",
-    ctaHref: "/projects",
-  },
-  {
-    label: "03",
-    title: "LA Sayeed Tower",
-    loc: "Khulna",
-    year: "2022",
-    img: heroSayeedP,
-    alt: "LA Sayeed Tower",
-    blurb:
-      "Brick that learns the weather. Light that knows the hour. Rooms that hold the long monsoon.",
-    cta: "Find out more about the studio",
-    ctaHref: "/about",
-  },
-  {
-    label: "04",
-    title: "Delta Project",
-    loc: "Khulna",
-    year: "2021",
-    img: hero7,
-    alt: "Architectural project, Khulna",
-    blurb:
-      "Quiet buildings, on loud sites. We draw every house nine times before we pour.",
-    cta: "Find out more about our projects",
-    ctaHref: "/projects",
-  },
-  {
-    label: "05",
-    title: "LA Sayeed Tower",
-    loc: "Khulna",
-    year: "2020",
-    img: heroSayeedL,
-    alt: "LA Sayeed Tower, elevation",
-    blurb:
-      "Eighteen years of drawing, building, and revisiting — carefully, from a small house in Sonadanga.",
-    cta: "Find out more about the studio",
-    ctaHref: "/about",
-  },
-  {
-    label: "06",
-    title: "Studio Work",
-    loc: "Khulna",
-    year: "2019",
-    img: heroB3,
-    alt: "Studio architectural work, Khulna",
-    blurb:
-      "Architecture as a slow conversation with place, light, and the long monsoon.",
-    cta: "Find out more about our projects",
-    ctaHref: "/projects",
-  },
+// The 6 supplied photographs, composed together in the hero montage.
+export const HERO_IMAGES: HeroImage[] = [
+  { img: heroResidential, alt: "Residential project, Khulna" },
+  { img: heroCrystal, alt: "Crystal Tower" },
+  { img: heroSayeedP, alt: "LA Sayeed Tower" },
+  { img: hero7, alt: "Architectural project, Khulna" },
+  { img: heroSayeedL, alt: "LA Sayeed Tower, elevation" },
+  { img: heroB3, alt: "Studio architectural work, Khulna" },
 ];
 
 export const TAGS = [
