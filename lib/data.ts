@@ -1,6 +1,6 @@
-// Project + firm data. Project imagery = striped SVG placeholders (replace
-// with real photography before launch). Hero imagery = supplied photographs.
-// Ported from source/src/data.jsx.
+// Project + firm data. Imagery = the supplied architectural photographs,
+// cycled across projects and the hero. `placeholder()` is kept as a utility
+// for any future page that still needs synthetic art. Ported from source/src/data.jsx.
 
 import type { StaticImageData } from "next/image";
 
@@ -17,7 +17,7 @@ export type Project = {
   tag: string;
   year: string;
   loc: string;
-  img: string;
+  img: StaticImageData;
 };
 
 export type HeroSlide = {
@@ -95,18 +95,16 @@ export function placeholder({
   return "data:image/svg+xml;base64," + b64Utf8(svg);
 }
 
-// Varied palettes for placeholders so the grid has rhythm.
-const P = [
-  { bg: "#2B241A", fg: "#F2EEE7", accent: "#8A6B47" }, // ink brown
-  { bg: "#3A352D", fg: "#EDE6D9", accent: "#C9A961" }, // warm olive
-  { bg: "#5C4628", fg: "#F2EEE7", accent: "#EDE6D9" }, // bronze
-  { bg: "#14130F", fg: "#EDE6D9", accent: "#C44828" }, // black + terra
-  { bg: "#746A57", fg: "#FBF8F1", accent: "#141311" }, // sage
-  { bg: "#8A6B47", fg: "#FBF8F1", accent: "#2B241A" }, // accent base
+// The 6 supplied photographs, reused as the project tile imagery.
+// Cycling keeps every card on a real photo until fuller coverage arrives.
+const PROJECT_IMAGES: StaticImageData[] = [
+  heroResidential,
+  heroCrystal,
+  heroSayeedP,
+  hero7,
+  heroSayeedL,
+  heroB3,
 ];
-const pal = (i: number) => P[i % P.length];
-const mk = (i: number, title: string, sub: string) =>
-  placeholder({ title, sub, ...pal(i) });
 
 type ProjectSeed = Omit<Project, "img">;
 
@@ -127,7 +125,7 @@ const PROJECT_SEEDS: ProjectSeed[] = [
 
 export const PROJECTS: Project[] = PROJECT_SEEDS.map((p, i) => ({
   ...p,
-  img: mk(i, p.title, p.id),
+  img: PROJECT_IMAGES[i % PROJECT_IMAGES.length],
 }));
 
 export const HERO_SLIDES: HeroSlide[] = [

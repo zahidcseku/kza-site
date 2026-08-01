@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { PROJECTS, TAGS } from "@/lib/data";
 
 type SloganTone = "ink" | "sand" | "terra";
@@ -81,8 +82,13 @@ export function Projects() {
         <div className="card-media">
           <span className="card-index">{p.id}</span>
           <span className="card-tag">{p.tag}</span>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={p.img} alt={p.title} loading="lazy" />
+          <Image
+            src={p.img}
+            alt={`${p.title} — ${p.loc}`}
+            fill
+            sizes="(max-width: 900px) 50vw, 33vw"
+            className="card-img"
+          />
         </div>
         <div className="card-meta">
           <div>
