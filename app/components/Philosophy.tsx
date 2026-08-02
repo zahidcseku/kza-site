@@ -12,7 +12,7 @@ export function Philosophy() {
           </h2>
           <div className="philosophy-signoff">
             <div>
-              <div className="who">— Kazi Zahin Hasan</div>
+              <div className="who">— Khan Zahidul Islam</div>
               <div className="role">Founding Partner</div>
             </div>
             <a href="/about" className="link">

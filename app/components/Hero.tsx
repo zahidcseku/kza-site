@@ -75,7 +75,7 @@ export function Hero() {
             {/* Finale: large brand mark, revealed once the dialogs have played. */}
             <Image
               src={logoImg}
-              alt="KZA — Kazi Zahin Architects"
+              alt="KZA — Khan Zahid Architects"
               width={logoImg.width}
               height={logoImg.height}
               priority

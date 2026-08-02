@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Logo } from "./Logo";
+import Image from "next/image";
+import logoImg from "@/app/assets/logo.png";
 
 type PageId =
   | "home"
@@ -67,34 +68,42 @@ export function Nav({
       <header
         className={`nav${scrolled ? " scrolled" : ""}${solid ? " solid" : ""}`}
       >
-        <a href="/" className="nav-brand">
-          <span className="mark">
-            <Logo size={36} />
-          </span>
-          <span>KZA</span>
+        <a href="/" className="nav-brand" aria-label="KZA — Khan Zahid Architects">
+          <Image
+            src={logoImg}
+            alt="KZA — Khan Zahid Architects"
+            width={logoImg.width}
+            height={logoImg.height}
+            priority
+            className="nav-logo"
+          />
         </a>
 
-        <div className="nav-actions">
-          <a href="/projects" className="nav-actions-link">
-            Projects
-          </a>
-          <a href="/about" className="nav-actions-link">
-            Studio
-          </a>
-          <button
-            className="nav-menu-btn"
-            onClick={() => setOpen(true)}
-            aria-label="Open menu"
-            aria-expanded={open}
-          >
-            <span className="bars" aria-hidden>
-              <span />
-              <span />
-              <span />
-            </span>
-            <span>Menu</span>
-          </button>
-        </div>
+        <nav className="nav-links">
+          {LINKS.map((l) => (
+            <a
+              key={l.id}
+              href={l.href}
+              className={currentPage === l.id ? "active" : ""}
+            >
+              {l.label}
+            </a>
+          ))}
+        </nav>
+
+        <button
+          className="nav-menu-btn"
+          onClick={() => setOpen(true)}
+          aria-label="Open menu"
+          aria-expanded={open}
+        >
+          <span className="bars" aria-hidden>
+            <span />
+            <span />
+            <span />
+          </span>
+          <span>Menu</span>
+        </button>
       </header>
 
       {open && (

@@ -26,7 +26,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "KZA — Kazi Zahin Architects",
+  title: "KZA — Khan Zahid Architects",
   description:
     "A studio of architects in Khulna, Bangladesh — making places that belong to their weather and their people.",
 };
