@@ -57,5 +57,11 @@ export const siteSettings = defineType({
       description: "Appears in the footer “Follow Us” column.",
     }),
   ],
-  preview: { select: { title: "studioName" } },
+  preview: {
+    select: { name: "studioName" },
+    prepare: ({ name }) => ({
+      title: name || "Site Settings",
+      subtitle: "Contact + social",
+    }),
+  },
 });

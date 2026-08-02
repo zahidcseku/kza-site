@@ -48,5 +48,11 @@ export const ribbon = defineType({
       validation: (r) => r.min(1),
     }),
   ],
-  preview: { select: { title: "introHeading" } },
+  preview: {
+    select: { heading: "introHeading", stats: "stats" },
+    prepare: ({ heading, stats }) => ({
+      title: heading || "Ribbon (In Numbers)",
+      subtitle: `${stats?.length ?? 0} stat cells`,
+    }),
+  },
 });

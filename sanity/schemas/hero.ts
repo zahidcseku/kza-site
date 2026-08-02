@@ -58,7 +58,13 @@ export const hero = defineType({
       validation: (r) => r.max(4),
     }),
   ],
-  preview: { select: { title: "title" } },
+  preview: {
+    select: { slides: "slides", dialogs: "dialogs" },
+    prepare: ({ slides, dialogs }) => ({
+      title: "Hero",
+      subtitle: `${slides?.length ?? 0} slides · ${dialogs?.length ?? 0} dialogs`,
+    }),
+  },
   // Give the singleton a readable title in the Studio desk.
   // (Singletons default their preview to the document type name.)
 });
