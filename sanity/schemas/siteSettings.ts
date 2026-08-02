@@ -58,9 +58,8 @@ export const siteSettings = defineType({
     }),
   ],
   preview: {
-    select: { name: "studioName" },
-    prepare: ({ name }) => ({
-      title: name || "Site Settings",
+    prepare: () => ({
+      title: "Site Settings",
       subtitle: "Contact + social",
     }),
   },

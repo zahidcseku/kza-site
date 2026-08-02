@@ -49,9 +49,9 @@ export const ribbon = defineType({
     }),
   ],
   preview: {
-    select: { heading: "introHeading", stats: "stats" },
-    prepare: ({ heading, stats }) => ({
-      title: heading || "Ribbon (In Numbers)",
+    select: { stats: "stats" },
+    prepare: ({ stats }) => ({
+      title: "Ribbon (In Numbers)",
       subtitle: `${stats?.length ?? 0} stat cells`,
     }),
   },
