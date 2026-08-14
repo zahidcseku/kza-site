@@ -9,8 +9,12 @@ export function Projects() {
   const filtered = tag === "All" ? PROJECTS : PROJECTS.filter((p) => p.tag === tag);
 
   // The gallery shows images, and the seed data cycles 6 photos across the
-  // projects — dedupe so no panel repeats.
+  // projects — dedupe so no panel repeats, then split across two rows.
   const images = [...new Set(filtered.map((p) => p.img.src))];
+  const mid = Math.ceil(images.length / 2);
+  const rows = [images.slice(0, mid), images.slice(mid)].filter(
+    (row) => row.length > 0,
+  );
 
   return (
     <section id="projects" className="projects">
@@ -41,9 +45,11 @@ export function Projects() {
         </div>
       </div>
 
-      <div className="projects-gallery">
-        <ExpandableGallery images={images} />
-      </div>
+      {rows.map((row, i) => (
+        <div className="projects-gallery" key={i}>
+          <ExpandableGallery images={row} />
+        </div>
+      ))}
 
       <div className="projects-all">
         <a href="/projects">View full archive — 124 projects →</a>
