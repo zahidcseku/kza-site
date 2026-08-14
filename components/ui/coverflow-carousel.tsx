@@ -40,6 +40,10 @@ export interface CoverflowCarouselProps {
   label?: string;
   className?: string;
   cardClassName?: string;
+  /** Replaces a card's default <img> — e.g. to swap in a playing embed. */
+  renderMedia?: (index: number) => React.ReactNode;
+  /** Fired when a card is tapped (not dragged): centers it and reports it. */
+  onActivate?: (index: number) => void;
 }
 
 export function CoverflowCarousel({
@@ -58,6 +62,8 @@ export function CoverflowCarousel({
   label = "Cover carousel",
   className,
   cardClassName,
+  renderMedia,
+  onActivate,
 }: CoverflowCarouselProps) {
   const count = slides.length;
 
@@ -73,6 +79,7 @@ export function CoverflowCarousel({
   const dragRef = React.useRef<{
     id: number;
     x: number;
+    y: number;
     pos: number;
     v: number;
     t: number;
@@ -181,6 +188,7 @@ export function CoverflowCarousel({
     dragRef.current = {
       id: event.pointerId,
       x: event.clientX,
+      y: event.clientY,
       pos: posRef.current,
       v: 0,
       t: performance.now(),
@@ -210,6 +218,26 @@ export function CoverflowCarousel({
     const drag = dragRef.current;
     if (!drag || drag.id !== event.pointerId) return;
     dragRef.current = null;
+
+    // A tap, not a drag: center and report the card under the pointer.
+    // (Pointer capture retargets pointer events to the frame, so the cards
+    // themselves never see clicks — hit-test at release instead.)
+    if (onActivate) {
+      const moved = Math.hypot(event.clientX - drag.x, event.clientY - drag.y);
+      if (moved < 6) {
+        const hit = document.elementFromPoint(event.clientX, event.clientY);
+        const card = hit instanceof HTMLElement
+          ? hit.closest<HTMLElement>("[data-cf-index]")
+          : null;
+        if (card) {
+          const index = Number(card.dataset.cfIndex);
+          goTo(index);
+          onActivate(index);
+          return;
+        }
+      }
+    }
+
     // Let a flick carry, but never more than two cards.
     const carried = Math.max(-2, Math.min(2, drag.v * 0.18));
     settle(clamp(Math.round(posRef.current + carried)));
@@ -266,6 +294,9 @@ export function CoverflowCarousel({
             } else if (event.key === "ArrowRight") {
               event.preventDefault();
               nudge(1);
+            } else if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              onActivate?.(selected);
             }
           }}
           // Vertical padding keeps the drop shadows clear of the overflow clip.
@@ -289,6 +320,7 @@ export function CoverflowCarousel({
                 ref={(node) => {
                   cardRefs.current[index] = node;
                 }}
+                data-cf-index={index}
                 role="group"
                 aria-roledescription="slide"
                 aria-label={`${index + 1} of ${count}`}
@@ -298,13 +330,17 @@ export function CoverflowCarousel({
                 )}
                 style={{ width: "var(--cf-card)" }}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={slide.src}
-                  alt={slide.alt}
-                  draggable={false}
-                  className="h-full w-full select-none object-cover"
-                />
+                {renderMedia ? (
+                  renderMedia(index)
+                ) : (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img
+                    src={slide.src}
+                    alt={slide.alt}
+                    draggable={false}
+                    className="h-full w-full select-none object-cover"
+                  />
+                )}
               </div>
             ))}
           </div>

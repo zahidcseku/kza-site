@@ -1,5 +1,5 @@
 import { fetchYouTubeFeed } from "@/lib/sanity.queries";
-import { CoverflowCarousel } from "@/components/ui/coverflow-carousel";
+import { YouTubeCarousel } from "./YouTubeCarousel";
 
 // Sanity-driven coverflow of YouTube videos. Renders nothing until the
 // editor adds a "YouTube Reel" document with at least one video.
@@ -8,12 +8,6 @@ export async function YouTubeFeed() {
   const videos = data?.videos ?? [];
   if (!data || videos.length === 0) return null;
 
-  const slides = videos.map((v) => ({
-    src: `https://i.ytimg.com/vi/${v.videoId}/hqdefault.jpg`,
-    alt: v.title,
-    title: v.title,
-  }));
-
   return (
     <section className="youtube">
       <div className="youtube-head">
@@ -21,13 +15,7 @@ export async function YouTubeFeed() {
         {data.body && <p>{data.body}</p>}
       </div>
       <div className="youtube-coverflow">
-        <CoverflowCarousel
-          slides={slides}
-          cardWidth="clamp(200px, 24vw, 300px)"
-          showCaption
-          showNavigation
-          label="YouTube reel"
-        />
+        <YouTubeCarousel videos={videos} />
       </div>
       {data.channelUrl && (
         <div className="youtube-foot">
