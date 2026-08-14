@@ -13,10 +13,12 @@ export async function Team() {
   return (
     <section id="team" className="team">
       <div className="team-head">
-        <span className="eyebrow">§ 04 — The Studio</span>
         <h2>
           Crafting beautiful spaces for a <em>sustainable world.</em>
         </h2>
+        <a className="team-about-btn" href="/about">
+          About Khan Zahid Architects
+        </a>
       </div>
       <div className="team-grid">
         {members.map((m) => {
