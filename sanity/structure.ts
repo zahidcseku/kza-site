@@ -21,6 +21,11 @@ export const structure: StructureResolver = (S) =>
         .id("youtubeFeed")
         .title("YouTube Reel")
         .child(S.document().schemaType("youtubeFeed").documentId("youtubeFeed")),
+      // A real document list — editors can add, remove, and edit members.
+      S.listItem()
+        .id("teamMember")
+        .title("Team")
+        .child(S.documentTypeList("teamMember")),
       S.divider(),
       S.listItem()
         .id("siteSettings")
