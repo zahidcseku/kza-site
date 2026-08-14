@@ -57,7 +57,6 @@ button { font: inherit; color: inherit; cursor: pointer; background: none; borde
 .container { max-width: var(--container); margin: 0 auto; padding: 0 var(--gutter); }
 .full      { padding: 0 var(--gutter); }
 .rule      { height: 1px; background: var(--rule); width: 100%; }
-.eyebrow   { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
 .numeral   { font-family: var(--mono); font-variant-numeric: tabular-nums; }
 
 h1,h2,h3 { font-family: var(--serif); font-weight: 400; letter-spacing: -0.01em; line-height: 0.98; }
@@ -519,7 +518,7 @@ p { line-height: 1.5; }
 
 /* ---------- PROJECTS ---------- */
 .projects {
-  padding: clamp(60px, 7vw, 120px) 0 clamp(80px, 9vw, 140px);
+  padding: clamp(36px, 4.5vw, 64px) 0 clamp(80px, 9vw, 140px);
   background: var(--bg);
 }
 .projects-head {
@@ -538,7 +537,6 @@ p { line-height: 1.5; }
 }
 .projects-filter button:hover { border-color: var(--ink); }
 .projects-filter button.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-.projects-count { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-left: 12px; }
 
 /* Expandable gallery (components/ui/gallery-animation.tsx) bounded to the
    site container. Rendered as two rows; a hair of space between them. */

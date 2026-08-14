@@ -20,12 +20,6 @@ export function Projects() {
     <section id="projects" className="projects">
       <div className="projects-head">
         <div>
-          <div className="eyebrow" style={{ marginBottom: 16 }}>
-            § 03 — Selected Works{" "}
-            <span className="projects-count">
-              {String(filtered.length).padStart(3, "0")} shown
-            </span>
-          </div>
           <h2>
             Built, drawn
             <br />
