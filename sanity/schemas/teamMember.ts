@@ -10,6 +10,13 @@ export const teamMember = defineType({
   type: "document",
   fields: [
     defineField({
+      name: "showOnHomepage",
+      title: "Show on homepage",
+      type: "boolean",
+      description: "Turn on to feature this member in the homepage team section.",
+      initialValue: true,
+    }),
+    defineField({
       name: "name",
       title: "Name",
       type: "string",
