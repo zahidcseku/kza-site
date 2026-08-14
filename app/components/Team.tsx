@@ -23,8 +23,8 @@ export async function Team() {
           const hotspot = m.photo?.hotspot;
           const src = m.photo
             ? urlFor(m.photo)
-                .width(600)
-                .height(750)
+                .width(900)
+                .height(675)
                 .fit("crop")
                 .crop(hotspot ? "focalpoint" : "center")
                 .focalPoint(hotspot?.x ?? 0.5, hotspot?.y ?? 0.5)
@@ -44,7 +44,7 @@ export async function Team() {
                     src={src}
                     alt={m.photo?.alt || m.name}
                     fill
-                    sizes="(max-width: 900px) 50vw, 25vw"
+                    sizes="(max-width: 640px) 100vw, 50vw"
                     className="team-img"
                   />
                 ) : (
