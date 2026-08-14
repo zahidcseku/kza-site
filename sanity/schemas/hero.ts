@@ -26,7 +26,10 @@ export const hero = defineType({
           ],
         }),
       ],
-      description: "The full-bleed photographs that cycle in the hero. Drag to reorder — the first image shows on load.",
+      description:
+        "The full-bleed photographs that cycle in the hero. Drag to reorder — the first image shows on load. " +
+        "Best size: 2400 × 1350 px (16:9 landscape), minimum 1920 × 1080 px — they fill the whole viewport and zoom slowly, so smaller files look soft. " +
+        "Set a hotspot on each image so the subject stays in frame when cropped to portrait phones, keep key detail away from the edges, and compress each file to under ~400 KB (JPG or WebP).",
       validation: (r) => r.min(1).max(12),
     }),
     defineField({
