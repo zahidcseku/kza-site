@@ -9,12 +9,10 @@ export function Projects() {
   const filtered = tag === "All" ? PROJECTS : PROJECTS.filter((p) => p.tag === tag);
 
   // The gallery shows images, and the seed data cycles 6 photos across the
-  // projects — dedupe so no panel repeats, then chunk into rows of 4.
+  // projects — dedupe so no panel repeats. The full set fills the first
+  // row; the second row repeats it until more photos arrive.
   const images = [...new Set(filtered.map((p) => p.img.src))];
-  const rows: string[][] = [];
-  for (let i = 0; i < images.length; i += 4) {
-    rows.push(images.slice(i, i + 4));
-  }
+  const rows = [images, [...images]].filter((row) => row.length > 0);
 
   return (
     <section id="projects" className="projects">
