@@ -10,13 +10,6 @@ export const youtubeFeed = defineType({
   type: "document",
   fields: [
     defineField({
-      name: "eyebrow",
-      title: "Eyebrow",
-      type: "string",
-      description: "The small mono label above the heading, e.g. “§ 02 — On Film”.",
-      initialValue: "§ 02 — On Film",
-    }),
-    defineField({
       name: "heading",
       title: "Heading",
       type: "string",

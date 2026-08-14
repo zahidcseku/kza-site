@@ -44,11 +44,17 @@ export type YouTubeVideo = {
 };
 
 export type YouTubeFeedData = {
-  eyebrow?: string;
   heading?: string;
   body?: string;
   channelUrl?: string;
   videos?: YouTubeVideo[];
+};
+
+export type TeamMemberData = {
+  name: string;
+  designation?: string;
+  shortDesc?: string;
+  photo?: SanityImage;
 };
 
 export type SocialLink = { label: string; url: string };
@@ -86,11 +92,17 @@ const siteSettingsQuery = `*[_type == "siteSettings" && _id == "siteSettings"][0
 }`;
 
 const youtubeFeedQuery = `*[_type == "youtubeFeed" && _id == "youtubeFeed"][0]{
-  eyebrow,
   heading,
   body,
   channelUrl,
   "videos": videos[]{ videoId, title }
+}`;
+
+const teamQuery = `*[_type == "teamMember" && showOnHomepage == true] | order(_createdAt asc){
+  name,
+  designation,
+  shortDesc,
+  photo
 }`;
 
 // ---------- Fetch helpers ----------
@@ -120,5 +132,12 @@ export async function fetchYouTubeFeed(): Promise<YouTubeFeedData | null> {
   return sanityFetch<YouTubeFeedData | null>({
     query: youtubeFeedQuery,
     tags: ["youtubeFeed"],
+  });
+}
+
+export async function fetchTeamMembers(): Promise<TeamMemberData[]> {
+  return sanityFetch<TeamMemberData[]>({
+    query: teamQuery,
+    tags: ["teamMember"],
   });
 }

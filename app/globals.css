@@ -414,22 +414,28 @@ p { line-height: 1.5; }
   padding: 0 var(--gutter);
   margin-bottom: 32px;
 }
-.youtube-head .eyebrow { margin-bottom: 16px; }
 .youtube-head h2 { font-family: var(--serif); font-size: clamp(30px, 4vw, 56px); line-height: 1.04; letter-spacing: -0.01em; max-width: 760px; }
 .youtube-head p { font-size: 13.5px; color: var(--ink-2); line-height: 1.5; max-width: 560px; margin-top: 14px; }
 
 .youtube-track {
-  display: flex; gap: 20px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
+  overflow: hidden;
   max-width: var(--container); margin: 0 auto;
   padding: 22px var(--gutter) 18px;
-  -webkit-overflow-scrolling: touch;
 }
-.youtube-track::-webkit-scrollbar { display: none; }
-.youtube-track { scrollbar-width: none; }
+/* Slow marquee — the strip drifts left continuously; hovering pauses it so
+   cards are clickable. Videos are rendered twice for a seamless loop. */
+.youtube-marquee {
+  display: flex; gap: 20px;
+  width: max-content;
+  animation: youtube-marquee 45s linear infinite;
+}
+.youtube-track:hover .youtube-marquee { animation-play-state: paused; }
+@keyframes youtube-marquee {
+  /* One full set = half the strip + half the joining gap → seamless loop. */
+  to { transform: translateX(calc(-50% - 10px)); }
+}
 
-.youtube-card { flex: 0 0 auto; width: clamp(320px, 38vw, 460px); scroll-snap-align: start; display: flex; flex-direction: column; gap: 12px; perspective: 1400px; }
+.youtube-card { flex: 0 0 auto; width: clamp(320px, 38vw, 460px); display: flex; flex-direction: column; gap: 12px; perspective: 1400px; }
 .youtube-card-media {
   position: relative; display: block; width: 100%;
   aspect-ratio: 16 / 9; overflow: hidden; background: var(--bg-2);
@@ -491,6 +497,7 @@ p { line-height: 1.5; }
 .youtube-foot .link { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; border-bottom: 1px solid var(--ink); padding-bottom: 2px; }
 
 @media (prefers-reduced-motion: reduce) {
+  .youtube-marquee { animation: none !important; }
   .youtube-card-media:hover { transform: none; }
   .youtube-card-media:hover .youtube-thumb { transform: none; }
   .youtube-card-media:hover .youtube-badge-core { transform: none; }
@@ -645,6 +652,39 @@ p { line-height: 1.5; }
 }
 .projects-all a:hover { background: var(--ink); color: var(--bg); }
 
+/* ---------- TEAM ---------- */
+.team {
+  padding: clamp(60px, 7vw, 120px) 0 clamp(72px, 8vw, 130px);
+  background: var(--bg);
+  border-top: 1px solid var(--rule);
+}
+.team-head {
+  max-width: var(--container); margin: 0 auto 48px;
+  padding: 0 var(--gutter);
+}
+.team-head .eyebrow { margin-bottom: 16px; }
+.team-head h2 { font-family: var(--serif); font-size: clamp(30px, 4vw, 56px); line-height: 1.04; letter-spacing: -0.01em; max-width: 860px; }
+.team-head h2 em { font-style: italic; color: var(--accent-deep); }
+.team-grid {
+  max-width: var(--container); margin: 0 auto;
+  padding: 0 var(--gutter);
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 44px 24px;
+}
+.team-card { display: flex; flex-direction: column; }
+.team-card-photo {
+  position: relative; aspect-ratio: 4 / 5; overflow: hidden;
+  border-radius: 14px; background: var(--bg-2);
+  border: 1px solid var(--rule);
+  box-shadow: 0 12px 22px -12px rgba(0,0,0,0.28);
+  display: flex; align-items: center; justify-content: center;
+}
+.team-img { object-fit: cover; transition: transform .5s ease; }
+.team-card:hover .team-img { transform: scale(1.04); }
+.team-initials { font-family: var(--serif); font-size: 46px; color: var(--muted); }
+.team-card-name { font-family: var(--serif); font-size: clamp(20px, 1.5vw, 24px); line-height: 1.1; letter-spacing: -0.01em; margin-top: 16px; }
+.team-card-role { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+.team-card-desc { font-size: 12.5px; color: var(--ink-2); line-height: 1.45; margin-top: 8px; max-width: 260px; }
+
 /* ---------- FOOTER ---------- */
 /* Dark gray field with a light logo, address column, and a deeper base
    bar. Hover color leans into a warm tan — close to JA Architects' gold. */
@@ -767,6 +807,8 @@ p { line-height: 1.5; }
   .card,
   .feature-row,
   .projects-all,
+  .team-head,
+  .team-card,
   .footer-cols {
     animation: revealUp linear both;
     animation-timeline: view();
@@ -785,6 +827,7 @@ p { line-height: 1.5; }
   .footer-logo { grid-column: 1 / -1; margin-bottom: 8px; }
   .feature-row { grid-template-columns: 1fr; }
   .youtube-card { width: min(78vw, 340px); }
+  .team-grid { grid-template-columns: 1fr 1fr; gap: 36px 16px; }
 }
 
 /* ---------- reduced motion ---------- */

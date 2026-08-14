@@ -12,14 +12,17 @@ export async function YouTubeFeed() {
   return (
     <section className="youtube">
       <div className="youtube-head">
-        {data.eyebrow && <span className="eyebrow">{data.eyebrow}</span>}
         {data.heading && <h2>{data.heading}</h2>}
         {data.body && <p>{data.body}</p>}
       </div>
       <div className="youtube-track">
-        {videos.map((v) => (
-          <YouTubeCard key={v.videoId} videoId={v.videoId} title={v.title} />
-        ))}
+        {/* The list is rendered twice so the marquee can loop seamlessly —
+            the animation shifts by exactly one set (half the strip). */}
+        <div className="youtube-marquee">
+          {[...videos, ...videos].map((v, i) => (
+            <YouTubeCard key={`${v.videoId}-${i}`} videoId={v.videoId} title={v.title} />
+          ))}
+        </div>
       </div>
       {data.channelUrl && (
         <div className="youtube-foot">
