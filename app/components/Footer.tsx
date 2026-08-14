@@ -21,6 +21,25 @@ const Icon = {
       <path d="M3 7l9 6 9-6" />
     </svg>
   ),
+  facebook: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+    </svg>
+  ),
+  instagram: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <rect x="2" y="2" width="20" height="20" rx="5" />
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+    </svg>
+  ),
+  linkedin: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+      <rect x="2" y="9" width="4" height="12" />
+      <circle cx="4" cy="4" r="2" />
+    </svg>
+  ),
 };
 
 const MAP_URL =
@@ -73,9 +92,24 @@ export function Footer() {
           <div className="footer-col">
             <h5>Follow Us</h5>
             <ul>
-              <li><a href="#" target="_blank" rel="noreferrer">Facebook</a></li>
-              <li><a href="#" target="_blank" rel="noreferrer">Instagram</a></li>
-              <li><a href="#" target="_blank" rel="noreferrer">LinkedIn</a></li>
+              <li>
+                <a className="footer-social" href="#" target="_blank" rel="noreferrer">
+                  <span className="footer-icon">{Icon.facebook}</span>
+                  Facebook
+                </a>
+              </li>
+              <li>
+                <a className="footer-social" href="#" target="_blank" rel="noreferrer">
+                  <span className="footer-icon">{Icon.instagram}</span>
+                  Instagram
+                </a>
+              </li>
+              <li>
+                <a className="footer-social" href="#" target="_blank" rel="noreferrer">
+                  <span className="footer-icon">{Icon.linkedin}</span>
+                  LinkedIn
+                </a>
+              </li>
             </ul>
           </div>
         </div>

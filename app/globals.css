@@ -716,6 +716,11 @@ p { line-height: 1.5; }
 }
 .footer-row:hover .footer-icon { color: var(--footer-hover); opacity: 1; }
 
+/* Social links: same icon treatment as the address/contact rows. */
+.footer-social { display: inline-flex; align-items: center; gap: 12px; }
+.footer-social .footer-icon { padding-top: 0; }
+.footer-social:hover .footer-icon { color: var(--footer-hover); opacity: 1; }
+
 /* Copyright line: sits at the foot of the footer on the same dark ground,
    separated by a hairline rule. No separate darker bar — one cohesive
    block so nothing reads as an "extra section" beneath the columns. */
