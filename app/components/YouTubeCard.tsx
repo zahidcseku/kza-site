@@ -39,10 +39,26 @@ export function YouTubeCard({ videoId, title }: YouTubeCardProps) {
               sizes="(max-width: 640px) 78vw, 460px"
               className="youtube-thumb"
             />
-            <span className="youtube-play" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
-                <path d="M8 5v14l11-7z" />
+            <span className="youtube-badge" aria-hidden="true">
+              <svg className="youtube-badge-ring" viewBox="0 0 200 200">
+                <defs>
+                  <path
+                    id={`yt-arc-${videoId}`}
+                    d="M 100,100 m -78,0 a 78,78 0 1,1 156,0 a 78,78 0 1,1 -156,0"
+                    fill="none"
+                  />
+                </defs>
+                <text className="youtube-badge-text">
+                  <textPath href={`#yt-arc-${videoId}`} startOffset="0">
+                    KZ ARCHITECTS · KZ ARCHITECTS ·&nbsp;
+                  </textPath>
+                </text>
               </svg>
+              <span className="youtube-badge-core">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </span>
             </span>
           </>
         )}
