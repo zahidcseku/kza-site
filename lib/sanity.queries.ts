@@ -38,6 +38,19 @@ export type RibbonData = {
   stats?: RibbonStat[];
 };
 
+export type YouTubeVideo = {
+  videoId: string;
+  title: string;
+};
+
+export type YouTubeFeedData = {
+  eyebrow?: string;
+  heading?: string;
+  body?: string;
+  channelUrl?: string;
+  videos?: YouTubeVideo[];
+};
+
 export type SocialLink = { label: string; url: string };
 
 export type SiteSettings = {
@@ -72,6 +85,14 @@ const siteSettingsQuery = `*[_type == "siteSettings" && _id == "siteSettings"][0
   "social": social[]{ label, url }
 }`;
 
+const youtubeFeedQuery = `*[_type == "youtubeFeed" && _id == "youtubeFeed"][0]{
+  eyebrow,
+  heading,
+  body,
+  channelUrl,
+  "videos": videos[]{ videoId, title }
+}`;
+
 // ---------- Fetch helpers ----------
 
 export async function fetchHero(): Promise<HeroData | null> {
@@ -92,5 +113,12 @@ export async function fetchSiteSettings(): Promise<SiteSettings | null> {
   return sanityFetch<SiteSettings | null>({
     query: siteSettingsQuery,
     tags: ["siteSettings"],
+  });
+}
+
+export async function fetchYouTubeFeed(): Promise<YouTubeFeedData | null> {
+  return sanityFetch<YouTubeFeedData | null>({
+    query: youtubeFeedQuery,
+    tags: ["youtubeFeed"],
   });
 }

@@ -17,6 +17,10 @@ export const structure: StructureResolver = (S) =>
         .id("ribbon")
         .title("Ribbon (In Numbers)")
         .child(S.document().schemaType("ribbon").documentId("ribbon")),
+      S.listItem()
+        .id("youtubeFeed")
+        .title("YouTube Reel")
+        .child(S.document().schemaType("youtubeFeed").documentId("youtubeFeed")),
       S.divider(),
       S.listItem()
         .id("siteSettings")

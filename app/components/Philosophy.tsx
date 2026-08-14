@@ -3,7 +3,7 @@ export function Philosophy() {
     <section id="about" className="philosophy">
       <div className="philosophy-grid">
         <div>
-          <span className="philosophy-eyebrow">§ 02 — Philosophy</span>
+          <span className="philosophy-eyebrow">§ 03 — Philosophy</span>
         </div>
         <div className="philosophy-body">
           <h2>

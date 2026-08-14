@@ -122,7 +122,7 @@ export function Projects() {
       <div className="projects-head">
         <div>
           <div className="eyebrow" style={{ marginBottom: 16 }}>
-            § 03 — Selected Works{" "}
+            § 04 — Selected Works{" "}
             <span className="projects-count">
               {String(filtered.length).padStart(3, "0")} shown
             </span>
