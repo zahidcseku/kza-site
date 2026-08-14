@@ -407,7 +407,7 @@ p { line-height: 1.5; }
   color: var(--ink);
   border-bottom: 1px solid var(--rule);
   padding: clamp(56px, 7vw, 110px) 0 clamp(48px, 6vw, 90px);
-  overflow: hidden;
+  overflow-x: clip;
 }
 .youtube-head {
   max-width: var(--container); margin: 0 auto;
@@ -422,7 +422,7 @@ p { line-height: 1.5; }
   display: flex; gap: 20px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  padding: 4px var(--gutter) 8px;
+  padding: 22px var(--gutter) 18px;
   -webkit-overflow-scrolling: touch;
 }
 .youtube-track::-webkit-scrollbar { display: none; }
