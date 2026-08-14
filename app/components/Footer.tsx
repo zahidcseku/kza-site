@@ -1,5 +1,6 @@
 import Image from "next/image";
 import logoImg from "@/app/assets/logo.png";
+import { fetchSiteSettings } from "@/lib/sanity.queries";
 
 // Inline 18px icons — stroke inherits currentColor so they pick up each
 // link's hover state automatically.
@@ -42,10 +43,46 @@ const Icon = {
   ),
 };
 
-const MAP_URL =
-  "https://www.google.com/maps/search/?api=1&query=Khan+Zahid+Architects+Sonadanga+Khulna+Bangladesh";
+// Fallbacks mirror the values hardcoded before Site Settings was wired —
+// the footer renders identically until the editor fills the document.
+const FALLBACK = {
+  studioName: "Khan Zahid Architects",
+  address: "Sonadanga, Khulna\nBangladesh",
+  mapQuery: "Khan Zahid Architects Sonadanga Khulna Bangladesh",
+  phone: "+880 1712 753 160",
+  email: "kzarchi@gmail.com",
+};
 
-export function Footer() {
+// Shown until the editor adds real links in Site Settings → Social links.
+const DEFAULT_SOCIAL = [
+  { label: "Facebook", url: "#" },
+  { label: "Instagram", url: "#" },
+  { label: "LinkedIn", url: "#" },
+];
+
+// Match a social link's label to its icon — forgiving of case and wording
+// (e.g. "Facebook Page" still gets the Facebook mark). Unknown = text-only.
+function socialIcon(label: string): React.ReactNode | null {
+  const l = label.toLowerCase();
+  if (l.includes("facebook")) return Icon.facebook;
+  if (l.includes("instagram")) return Icon.instagram;
+  if (l.includes("linkedin")) return Icon.linkedin;
+  return null;
+}
+
+export async function Footer() {
+  const settings = await fetchSiteSettings();
+  const social = settings?.social?.length ? settings.social : DEFAULT_SOCIAL;
+
+  const studioName = settings?.studioName || FALLBACK.studioName;
+  const address = settings?.address || FALLBACK.address;
+  const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+    settings?.mapQuery || FALLBACK.mapQuery,
+  )}`;
+  const phone = settings?.phone || FALLBACK.phone;
+  const email = settings?.email || FALLBACK.email;
+  const telHref = `tel:${phone.replace(/[^\d+]/g, "")}`;
+
   return (
     <footer id="find" className="footer">
       <div className="footer-inner">
@@ -62,60 +99,54 @@ export function Footer() {
             <h5>Address</h5>
             <a
               className="footer-row"
-              href={MAP_URL}
+              href={mapUrl}
               target="_blank"
               rel="noreferrer"
             >
               <span className="footer-icon">{Icon.map}</span>
-              <span>
-                Khan Zahid Architects
-                <br />
-                Sonadanga, Khulna
-                <br />
-                Bangladesh
+              <span style={{ whiteSpace: "pre-line" }}>
+                {`${studioName}\n${address}`}
               </span>
             </a>
           </div>
 
           <div className="footer-col">
             <h5>Contact</h5>
-            <a className="footer-row" href="tel:+8801712753160">
+            <a className="footer-row" href={telHref}>
               <span className="footer-icon">{Icon.phone}</span>
-              <span>+880 1712 753 160</span>
+              <span>{phone}</span>
             </a>
-            <a className="footer-row" href="mailto:kzarchi@gmail.com">
+            <a className="footer-row" href={`mailto:${email}`}>
               <span className="footer-icon">{Icon.mail}</span>
-              <span>kzarchi@gmail.com</span>
+              <span>{email}</span>
             </a>
           </div>
 
           <div className="footer-col">
             <h5>Follow Us</h5>
             <ul>
-              <li>
-                <a className="footer-social" href="#" target="_blank" rel="noreferrer">
-                  <span className="footer-icon">{Icon.facebook}</span>
-                  Facebook
-                </a>
-              </li>
-              <li>
-                <a className="footer-social" href="#" target="_blank" rel="noreferrer">
-                  <span className="footer-icon">{Icon.instagram}</span>
-                  Instagram
-                </a>
-              </li>
-              <li>
-                <a className="footer-social" href="#" target="_blank" rel="noreferrer">
-                  <span className="footer-icon">{Icon.linkedin}</span>
-                  LinkedIn
-                </a>
-              </li>
+              {social.map((s) => {
+                const icon = socialIcon(s.label);
+                return (
+                  <li key={s.label}>
+                    <a
+                      className="footer-social"
+                      href={s.url || "#"}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {icon && <span className="footer-icon">{icon}</span>}
+                      {s.label}
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </div>
 
         <div className="footer-copy">
-          © 2008–2026 Khan Zahid Architects
+          © 2008–2026 {studioName}
           <span className="footer-copy-sep"> | </span>
           Developed by{" "}
           <a
