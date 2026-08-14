@@ -428,17 +428,27 @@ p { line-height: 1.5; }
 .youtube-track::-webkit-scrollbar { display: none; }
 .youtube-track { scrollbar-width: none; }
 
-.youtube-card { flex: 0 0 auto; width: clamp(320px, 38vw, 460px); scroll-snap-align: start; display: flex; flex-direction: column; gap: 12px; }
+.youtube-card { flex: 0 0 auto; width: clamp(320px, 38vw, 460px); scroll-snap-align: start; display: flex; flex-direction: column; gap: 12px; perspective: 1400px; }
 .youtube-card-media {
   position: relative; display: block; width: 100%;
   aspect-ratio: 16 / 9; overflow: hidden; background: var(--bg-2);
   border: 1px solid var(--rule); padding: 0; cursor: pointer;
+  border-radius: 14px;
+  box-shadow: 0 12px 22px -10px rgba(0,0,0,0.4), 0 5px 10px -6px rgba(0,0,0,0.22);
+  transform-style: preserve-3d;
+  transition: transform .45s cubic-bezier(.2,.7,.2,1), box-shadow .45s ease;
 }
-.youtube-card-media iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.youtube-card-media:hover {
+  transform: translateY(-6px) rotateX(5deg) rotateY(-7deg);
+  box-shadow: 0 30px 46px -14px rgba(0,0,0,0.5), 0 12px 20px -10px rgba(0,0,0,0.3);
+}
+.youtube-card-media iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; border-radius: 14px; }
 .youtube-thumb { object-fit: cover; transition: transform .5s ease; }
 .youtube-card-media:hover .youtube-thumb { transform: scale(1.04); }
 
-/* Rotating "KZ ARCHITECTS" badge with a pulsing play core (after btibd). */
+/* Rotating "KZ ARCHITECTS" badge with a pulsing play core. Styled in the
+   logo's palette — navy #1A365D, light blue #3182CE on white — so the play
+   affordance carries the brand mark rather than the site's terra accent. */
 .youtube-badge {
   position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
   width: clamp(118px, 30%, 150px); aspect-ratio: 1;
@@ -449,24 +459,24 @@ p { line-height: 1.5; }
   animation: youtube-spin 18s linear infinite;
 }
 .youtube-badge-text {
-  font-family: var(--mono); font-size: 17px; letter-spacing: 0.16em;
-  text-transform: uppercase; fill: var(--paper);
-  paint-order: stroke; stroke: rgba(0,0,0,0.45); stroke-width: 3px; stroke-linejoin: round;
+  font-family: var(--sans); font-weight: 700; font-size: 16px; letter-spacing: 0.12em;
+  text-transform: uppercase; fill: #1A365D;
+  paint-order: stroke; stroke: #FFFFFF; stroke-width: 3.5px; stroke-linejoin: round;
 }
 .youtube-badge-core {
   position: relative; width: 44%; aspect-ratio: 1; border-radius: 50%;
-  background: var(--accent); color: var(--paper);
+  background: #FFFFFF; color: #1A365D;
   display: flex; align-items: center; justify-content: center;
   box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-  transition: transform .25s ease, background .25s ease;
+  transition: transform .25s ease, color .25s ease;
 }
 .youtube-badge-core svg { margin-left: 3px; }
 .youtube-badge-core::before,
 .youtube-badge-core::after {
   content: ''; position: absolute; inset: -1px; border-radius: 50%;
-  border: 1px solid var(--accent); opacity: 0;
+  border: 1px solid #3182CE; opacity: 0;
 }
-.youtube-card-media:hover .youtube-badge-core { transform: scale(1.08); background: var(--accent-deep); }
+.youtube-card-media:hover .youtube-badge-core { transform: scale(1.08); color: #3182CE; }
 .youtube-badge-core::before { animation: youtube-pulse 2.6s ease-out infinite; }
 .youtube-badge-core::after  { animation: youtube-pulse 2.6s ease-out 1.3s infinite; }
 @keyframes youtube-spin { to { transform: rotate(360deg); } }
@@ -474,42 +484,19 @@ p { line-height: 1.5; }
   0%   { transform: scale(1); opacity: 0.55; }
   100% { transform: scale(2.2); opacity: 0; }
 }
-.youtube-card-title { font-family: var(--sans); font-size: 13.5px; color: var(--ink-2); line-height: 1.4; padding: 0 2px; }
+.youtube-card-title { font-family: var(--serif); font-size: clamp(20px, 1.5vw, 26px); line-height: 1.1; letter-spacing: -0.01em; color: var(--ink); }
 
 .youtube-foot { max-width: var(--container); margin: 32px auto 0; padding: 0 var(--gutter); }
 .youtube-foot .link { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; border-bottom: 1px solid var(--ink); padding-bottom: 2px; }
 
 @media (prefers-reduced-motion: reduce) {
+  .youtube-card-media:hover { transform: none; }
   .youtube-card-media:hover .youtube-thumb { transform: none; }
   .youtube-card-media:hover .youtube-badge-core { transform: none; }
   .youtube-badge-ring { animation: none !important; }
   .youtube-badge-core::before,
   .youtube-badge-core::after { animation: none !important; opacity: 0.4; }
 }
-
-/* ---------- PHILOSOPHY ---------- */
-.philosophy {
-  padding: clamp(80px, 10vw, 160px) var(--gutter);
-  background: var(--bg);
-  color: var(--ink);
-}
-.philosophy-grid {
-  max-width: var(--container); margin: 0 auto;
-  display: grid; grid-template-columns: 1fr 2fr; gap: 80px;
-  align-items: start;
-}
-.philosophy-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 12px; }
-.philosophy-eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--ink); display: inline-block; }
-.philosophy-body h2 {
-  font-family: var(--serif); font-size: clamp(32px, 4.2vw, 64px); line-height: 1.05; letter-spacing: -0.01em;
-  max-width: 900px;
-}
-.philosophy-body h2 em { font-style: italic; color: var(--accent-deep); }
-.philosophy-body .lede { margin-top: 40px; font-size: 16.5px; line-height: 1.55; color: var(--ink-2); max-width: 640px; }
-.philosophy-signoff { margin-top: 56px; display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: end; padding-top: 24px; border-top: 1px solid var(--rule); }
-.philosophy-signoff .who { font-family: var(--serif); font-style: italic; font-size: 22px; }
-.philosophy-signoff .role { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
-.philosophy-signoff .link { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; border-bottom: 1px solid var(--ink); padding-bottom: 2px; }
 
 /* ---------- PROJECTS ---------- */
 .projects {
@@ -768,9 +755,6 @@ p { line-height: 1.5; }
 }
 @supports (animation-timeline: view()) {
   .ribbon-cell,
-  .philosophy-eyebrow,
-  .philosophy-body h2,
-  .philosophy-signoff,
   .youtube-head,
   .youtube-card,
   .projects-head,
@@ -790,7 +774,6 @@ p { line-height: 1.5; }
   .ribbon-cell { border-left: 1px solid var(--rule); }
   .ribbon-cell:nth-child(odd) { border-left: none; padding-left: 0; }
   .ribbon-intro { grid-column: 1 / -1; padding-left: 0; border-left: none; }
-  .philosophy-grid { grid-template-columns: 1fr; gap: 28px; }
   .grid-uniform { grid-template-columns: 1fr 1fr; }
   .footer-cols { grid-template-columns: 1fr 1fr; gap: 40px; }
   .footer-logo { grid-column: 1 / -1; margin-bottom: 8px; }
@@ -817,7 +800,7 @@ p { line-height: 1.5; }
     opacity: 0.96 !important;
     transform: none !important;
   }
-  .ribbon-cell, .philosophy-eyebrow, .philosophy-body h2, .philosophy-signoff,
+  .ribbon-cell,
   .projects-head, .card, .feature-row, .projects-all,
   .footer-cols,
   .card-media .card-img, .hero-panel .hero-img,
