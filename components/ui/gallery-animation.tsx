@@ -69,18 +69,21 @@ const ExpandableGallery: React.FC<ExpandableGalleryProps> = ({ images, titles, c
               animate={{ opacity: hoveredIndex === index ? 0 : 0.3 }}
               transition={{ duration: 0.3 }}
             />
-            {/* Hover caption — project name over an ink gradient in the
-                site palette, rising from the panel's bottom edge. */}
+            {/* Hover caption — project name on a solid ink band across the
+                panel's bottom edge, in the site palette. */}
             {titles?.[index] && (
               <motion.div
-                className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-foreground/85 via-foreground/40 to-transparent px-4 pb-3 pt-10"
+                className="pointer-events-none absolute inset-x-0 bottom-0 bg-foreground py-3 pl-6 pr-4"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: hoveredIndex === index ? 1 : 0 }}
                 transition={{ duration: 0.25 }}
               >
                 <p
-                  className="text-lg text-background"
-                  style={{ fontFamily: 'var(--serif)' }}
+                  className="text-background leading-tight"
+                  style={{
+                    fontFamily: 'var(--serif)',
+                    fontSize: 'clamp(22px, 2vw, 30px)',
+                  }}
                 >
                   {titles[index]}
                 </p>
