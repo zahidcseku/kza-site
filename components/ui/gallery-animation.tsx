@@ -7,10 +7,12 @@ interface ExpandableGalleryProps {
   images: string[];
   /** Optional label per panel, revealed at the bottom on hover. */
   titles?: string[];
+  /** Optional smaller second line beneath the title (e.g. location). */
+  subtitles?: string[];
   className?: string;
 }
 
-const ExpandableGallery: React.FC<ExpandableGalleryProps> = ({ images, titles, className = '' }) => {
+const ExpandableGallery: React.FC<ExpandableGalleryProps> = ({ images, titles, subtitles, className = '' }) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
@@ -73,7 +75,7 @@ const ExpandableGallery: React.FC<ExpandableGalleryProps> = ({ images, titles, c
                 panel's bottom edge, in the site palette. */}
             {titles?.[index] && (
               <motion.div
-                className="pointer-events-none absolute inset-x-0 bottom-0 bg-foreground py-3 pl-6 pr-4"
+                className="pointer-events-none absolute inset-x-0 bottom-0 bg-foreground py-3 pl-10 pr-6"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: hoveredIndex === index ? 1 : 0 }}
                 transition={{ duration: 0.25 }}
@@ -87,6 +89,19 @@ const ExpandableGallery: React.FC<ExpandableGalleryProps> = ({ images, titles, c
                 >
                   {titles[index]}
                 </p>
+                {subtitles?.[index] && (
+                  <p
+                    className="mt-1 text-background/70"
+                    style={{
+                      fontFamily: 'var(--mono)',
+                      fontSize: 11,
+                      letterSpacing: '0.14em',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    {subtitles[index]}
+                  </p>
+                )}
               </motion.div>
             )}
           </motion.div>

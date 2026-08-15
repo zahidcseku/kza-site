@@ -13,8 +13,10 @@ export function Projects() {
   // project's name for the hover caption; the full set fills the first row,
   // and the second row repeats it until more photos arrive.
   const titleForImage = new Map(PROJECTS.map((p) => [p.img.src, p.title]));
+  const locForImage = new Map(PROJECTS.map((p) => [p.img.src, p.loc]));
   const images = [...new Set(filtered.map((p) => p.img.src))];
   const titles = images.map((src) => titleForImage.get(src) ?? "");
+  const locations = images.map((src) => locForImage.get(src) ?? "");
   const rows = [images, [...images]].filter((row) => row.length > 0);
 
   return (
@@ -42,7 +44,7 @@ export function Projects() {
 
       {rows.map((row, i) => (
         <div className="projects-gallery" key={i}>
-          <ExpandableGallery images={row} titles={titles} />
+          <ExpandableGallery images={row} titles={titles} subtitles={locations} />
         </div>
       ))}
 
