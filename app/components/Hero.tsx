@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { HERO_IMAGES } from "@/lib/data";
+import { fetchHero } from "@/lib/sanity.queries";
+import { urlFor } from "@/lib/sanity.image";
 import logoImg from "@/app/assets/logo.png";
 
 type Dialog = { headline: React.ReactNode; sub: string };
@@ -33,21 +35,54 @@ const DIALOGS: Dialog[] = [
   },
 ];
 
+// Each slide occupies a 5.5s slot of the heroSeq keyframe cycle, so the
+// total cycle scales with the number of images the editor publishes.
+const SLIDE_SLOT = 5.5;
+
 // Pure-CSS sequential zoom hero. A single keyframe animation (heroSeq) runs
-// on every panel; each panel is offset in time via :nth-child animation-delay
-// so the six images crossfade into one another in order, each zooming (Ken
+// on every panel; each panel is offset in time via an inline animation-delay
+// so the images crossfade into one another in order, each zooming (Ken
 // Burns push-in) for the duration of its slot. The three dialogs rotate on
-// their own 33s cycle. No JavaScript required.
-export function Hero() {
+// their own 33s cycle. No JavaScript required. Slides come from the Sanity
+// hero singleton; the bundled photo set is the fallback before content
+// exists so the stage never renders empty.
+export async function Hero() {
+  const data = await fetchHero();
+
+  const slides = data?.slides?.length
+    ? data.slides.map((s) => {
+        const hotspot = s.hotspot;
+        return {
+          src: urlFor(s)
+            .width(2400)
+            .height(1350)
+            .fit("crop")
+            .crop(hotspot ? "focalpoint" : "center")
+            .focalPoint(hotspot?.x ?? 0.5, hotspot?.y ?? 0.5)
+            .url(),
+          alt: s.alt ?? "",
+        };
+      })
+    : HERO_IMAGES.map((t) => ({ src: t.img, alt: t.alt }));
+
+  const cycle = slides.length * SLIDE_SLOT;
+
   return (
     <div className="hero-wrap">
       <section id="home" className="hero">
         <div className="hero-stage">
-          {HERO_IMAGES.map((t, i) => (
-            <div key={i} className="hero-panel">
+          {slides.map((t, i) => (
+            <div
+              key={i}
+              className="hero-panel"
+              style={{
+                animationDuration: `${cycle}s`,
+                animationDelay: `${-1.5 + i * SLIDE_SLOT}s`,
+              }}
+            >
               <Image
-                src={t.img}
-                alt=""
+                src={t.src}
+                alt={t.alt}
                 fill
                 sizes="100vw"
                 priority={i === 0}
